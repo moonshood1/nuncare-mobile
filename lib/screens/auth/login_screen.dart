@@ -15,136 +15,185 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void goToRegistration() {
     widget.goToRegistration();
   }
 
   void checkDataAndProceed() {
     // recuperer les données saisies dans les deux inputs
+    print(_emailController.text);
+    print(_passwordController.text);
+
+    if (_emailController.text.trim() != "louisrogerguirika@gmail.com" &&
+        _passwordController.text.trim() != "12345678") {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Données invalides"),
+          content: const Text(
+            'Les données de connexion saisies ne sont liées à aucun compte , veuillez reessayer',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text(
+                "OK",
+                style: TextStyle(color: primarygreen),
+              ),
+            )
+          ],
+        ),
+      );
+      return;
+    }
 
     // verifier si elles sont valides ou existent dans la BD
 
     // si ok , rediriger vers la page finale
-
-    // si non afficher un message d'erreur
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeRootScreen(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-        child: Column(
-          children: [
-            const Spacer(),
-            Image.asset(
-              "assets/images/logo_nuncare.png",
-              width: 60,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Connectez-vous à votre compte",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            CustomTextField(
-              hintText: "Adresse email",
-              icon: Icons.email,
-              isHidden: false,
-              isDate: false,
-              validator: (value) {
-                const emailPattern =
-                    r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
-                final regExp = RegExp(emailPattern);
-                if (!regExp.hasMatch(value ?? '')) {
-                  return 'Adresse e-mail invalide';
-                }
-                return null;
-              },
-            ),
-            CustomTextField(
-              hintText: "Mot de passe",
-              icon: Icons.lock,
-              isHidden: true,
-              isDate: false,
-              validator: (value) {
-                if ((value ?? '').length < 6) {
-                  return 'Le mot de passe doit contenir au moins 6 caractères';
-                }
-                return null;
-              },
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              width: double.infinity,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SecurityRootScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Mot de passe oublié ?",
-                    style: TextStyle(color: primarygreen),
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final width = constraints.maxWidth;
+
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
+              child: Column(
+                children: <Widget>[
+                  Image.asset(
+                    "assets/images/logo_nuncare.png",
+                    width: 60,
                   ),
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeRootScreen(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Connectez-vous à votre compte",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: primarygreen,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50))),
-                child: Text(
-                  "Connexion",
-                  style: GoogleFonts.poppins(fontSize: 15),
-                ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  CustomTextField(
+                    controller: _emailController,
+                    hintText: "Adresse email",
+                    icon: Icons.email,
+                    isHidden: false,
+                    isDate: false,
+                    validator: (value) {
+                      const emailPattern =
+                          r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
+                      final regExp = RegExp(emailPattern);
+                      if (!regExp.hasMatch(value ?? '')) {
+                        return 'Adresse e-mail invalide';
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextField(
+                    controller: _passwordController,
+                    hintText: "Mot de passe",
+                    icon: Icons.lock,
+                    isHidden: true,
+                    isDate: false,
+                    validator: (value) {
+                      if ((value ?? '').length < 6) {
+                        return 'Le mot de passe doit contenir au moins 6 caractères';
+                      }
+                      return null;
+                    },
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    width: double.infinity,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SecurityRootScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Mot de passe oublié ?",
+                          style: GoogleFonts.poppins(color: primarygreen),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    child: ElevatedButton(
+                      onPressed: checkDataAndProceed,
+                      style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: primarygreen,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50))),
+                      child: Text(
+                        "Connexion",
+                        style: GoogleFonts.poppins(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Vous n'avez pas de compte ? ",
+                    style: GoogleFonts.poppins(),
+                  ),
+                  TextButton(
+                    onPressed: goToRegistration,
+                    child: Text(
+                      "Créer un compte",
+                      style: GoogleFonts.poppins(color: primarygreen),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
             ),
-            const Spacer(),
-            Text(
-              "Vous n'avez pas de compte ? ",
-              style: GoogleFonts.poppins(),
-            ),
-            TextButton(
-              onPressed: goToRegistration,
-              child: Text(
-                "Créer un compte",
-                style: GoogleFonts.poppins(color: primarygreen),
-              ),
-            ),
-            const Spacer(),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

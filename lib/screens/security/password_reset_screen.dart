@@ -51,7 +51,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                     index == 0
                         ? "ou renseignez numéro de téléphone"
                         : "ou renseignez votre email",
-                    style: const TextStyle(color: primarygreen),
+                    style: GoogleFonts.poppins(color: primarygreen),
                   ),
                 ),
               ),
@@ -97,6 +97,7 @@ class EmailResetMethodWidget extends StatefulWidget {
 }
 
 class _EmailResetMethodWidgetState extends State<EmailResetMethodWidget> {
+  final _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -105,7 +106,7 @@ class _EmailResetMethodWidgetState extends State<EmailResetMethodWidget> {
         Text(
           "Renseignez votre adresse mail",
           style: GoogleFonts.poppins(
-            fontSize: 25,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -113,9 +114,9 @@ class _EmailResetMethodWidgetState extends State<EmailResetMethodWidget> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
+        Text(
           "Vous recevrez un code sur votre mail pour continuer",
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Colors.black,
@@ -125,6 +126,7 @@ class _EmailResetMethodWidgetState extends State<EmailResetMethodWidget> {
           height: 10,
         ),
         CustomTextField(
+          controller: _emailController,
           hintText: "Adresse email",
           icon: Icons.email,
           isHidden: false,
@@ -152,6 +154,7 @@ class PhoneResetMethodWidget extends StatefulWidget {
 }
 
 class _PhoneResetMethodWidgetState extends State<PhoneResetMethodWidget> {
+  final _phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -160,7 +163,7 @@ class _PhoneResetMethodWidgetState extends State<PhoneResetMethodWidget> {
         Text(
           "Renseignez votre numéro de téléphone",
           style: GoogleFonts.poppins(
-            fontSize: 25,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -168,9 +171,9 @@ class _PhoneResetMethodWidgetState extends State<PhoneResetMethodWidget> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
+        Text(
           "Vous recevrez un code sur votre numéro pour continuer",
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Colors.black,
@@ -180,6 +183,7 @@ class _PhoneResetMethodWidgetState extends State<PhoneResetMethodWidget> {
           height: 10,
         ),
         CustomTextField(
+          controller: _phoneController,
           hintText: "Téléphone",
           icon: Icons.phone,
           isHidden: false,

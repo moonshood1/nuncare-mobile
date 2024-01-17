@@ -13,6 +13,8 @@ class PasswordChangeScreen extends StatefulWidget {
 }
 
 class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
+  final _passwordController = TextEditingController();
+  final _repeatedPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     void goToLoginScreen() {
@@ -29,7 +31,7 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
             Text(
               "Entrez votre nouveau mot de passe",
               style: GoogleFonts.poppins(
-                fontSize: 25,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -37,9 +39,9 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
+            Text(
               "Veuillez saisir un nouveau mot de passe pour votre compte",
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: Colors.black,
@@ -49,6 +51,7 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
               height: 10,
             ),
             CustomTextField(
+              controller: _passwordController,
               hintText: "Nouveau mot de passe",
               icon: Icons.lock,
               isHidden: true,
@@ -61,6 +64,7 @@ class _PasswordChangeScreenState extends State<PasswordChangeScreen> {
               },
             ),
             CustomTextField(
+              controller: _repeatedPasswordController,
               hintText: "Confirmation du mot de passe",
               icon: Icons.lock,
               isHidden: true,

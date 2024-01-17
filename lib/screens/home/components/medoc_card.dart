@@ -1,37 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nuncare/models/medecine.dart';
 
 class MedocCard extends StatelessWidget {
-  const MedocCard(
-      {required this.image,
-      required this.category,
-      required this.medocName,
-      super.key});
+  const MedocCard({required this.medecine, super.key});
 
-  final String image, medocName, category;
+  final Medecine medecine;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      margin: const EdgeInsets.only(right: 10),
+      width: 200,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Colors.black.withOpacity(0.1)),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 2,
+            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.25),
+          ),
+        ],
       ),
-      width: 170,
-      height: 190,
       child: Column(
         children: <Widget>[
           Image.asset(
-            image,
+            medecine.image,
             height: 70,
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
-            medocName,
+            medecine.name,
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
@@ -40,7 +43,7 @@ class MedocCard extends StatelessWidget {
             ),
           ),
           Text(
-            category,
+            medecine.category,
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.normal,
               fontSize: 14,

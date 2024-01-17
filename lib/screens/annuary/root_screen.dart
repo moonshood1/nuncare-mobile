@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nuncare/data/annuary/data.dart';
+import 'package:nuncare/data/doctors.dart';
+import 'package:nuncare/data/pharmacies.dart';
 import 'package:nuncare/screens/home/components/pharmacy_card.dart';
 import 'package:nuncare/screens/home/components/profile_card.dart';
 
-class AnnuaryScreen extends StatefulWidget {
-  const AnnuaryScreen({super.key});
+class AnnuaryRootScreen extends StatefulWidget {
+  const AnnuaryRootScreen({super.key});
 
   @override
-  State<AnnuaryScreen> createState() => _AnnuaryScreenState();
+  State<AnnuaryRootScreen> createState() => _AnnuaryRootScreenState();
 }
 
-class _AnnuaryScreenState extends State<AnnuaryScreen> {
+class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
   int _selectedIndex = 0;
 
   void updateCategory(int index) {
@@ -77,31 +78,25 @@ class _AnnuaryCategoryState extends State<AnnuaryCategory> {
 
   final List<List<Widget>> dataDisplayed = [
     doctors
-        .map((doctor) => ProfileCard(
-              picture: doctor.picture,
-              name: doctor.name,
-              role: doctor.role,
-              stars: doctor.stars,
-              position: doctor.position,
-            ))
+        .map(
+          (doctor) => ProfileCard(
+            doctor: doctor,
+          ),
+        )
         .toList(),
     pharmacies
-        .map((pharmacy) => PharmacyCard(
-              picture: pharmacy.picture,
-              name: pharmacy.name,
-              location: pharmacy.location,
-              stars: pharmacy.stars,
-              position: pharmacy.position,
-            ))
+        .map(
+          (pharmacy) => PharmacyCard(
+            pharmacy: pharmacy,
+          ),
+        )
         .toList(),
     pharmacies
-        .map((pharmacy) => PharmacyCard(
-              picture: pharmacy.picture,
-              name: pharmacy.name,
-              location: pharmacy.location,
-              stars: pharmacy.stars,
-              position: pharmacy.position,
-            ))
+        .map(
+          (pharmacy) => PharmacyCard(
+            pharmacy: pharmacy,
+          ),
+        )
         .toList(),
   ];
 
@@ -134,7 +129,7 @@ class _AnnuaryCategoryState extends State<AnnuaryCategory> {
                 child: ElevatedButton(
                   onPressed: () => setCurrentIndex(index),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(50, 50),
+                    minimumSize: const Size(70, 70),
                     backgroundColor: primarygreen,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -143,7 +138,7 @@ class _AnnuaryCategoryState extends State<AnnuaryCategory> {
                   ),
                   child: Image.asset(
                     categories[index],
-                    height: 30,
+                    height: 40,
                   ),
                 ),
               ),

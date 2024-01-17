@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:intl/intl.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
@@ -10,29 +9,24 @@ class CustomTextField extends StatefulWidget {
     required this.isHidden,
     required this.validator,
     required this.isDate,
+    required this.controller,
     super.key,
   });
 
   final IconData icon;
   final String hintText;
-  bool isHidden;
+  final bool isHidden;
 
   final bool isDate;
   final String? Function(String?) validator;
+  final TextEditingController controller;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  final TextEditingController _controller = TextEditingController();
   String? _errorText;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +36,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onChanged: (value) => setState(() {
           _errorText = widget.validator(value);
         }),
-        controller: _controller,
+        controller: widget.controller,
         style: GoogleFonts.poppins(),
         obscureText: widget.isHidden,
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: const TextStyle(
             color: Colors.grey,
-            fontSize: 14,
+            fontSize: 12,
           ),
           prefixIcon: Icon(
             widget.icon,
@@ -60,23 +54,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primarygreen.withOpacity(0.5)),
+            borderSide: const BorderSide(color: primarygreen),
             borderRadius: BorderRadius.circular(10.0),
           ),
           errorText: _errorText,
-          // suffixIcon: widget.isHidden
-          //     ? InkWell(
-          //         onTap: () {
-          //           setState(() {
-          //             widget.isHidden = !widget.isHidden;
-          //           });
-          //         },
-          //         child: Icon(
-          //           widget.isHidden ? Icons.visibility : Icons.visibility_off,
-          //           color: primarygreen,
-          //         ),
-          //       )
-          //     : null,
         ),
       ),
     );
@@ -110,25 +91,27 @@ class _CustomRadioGroupState extends State<CustomRadioGroup> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: widget.radioItems
-          .map(
-            (item) => Row(
-              children: [
-                Radio<String>(
-                  value: item.value,
-                  groupValue: _selectedValue,
-                  onChanged: (String? value) {
-                    setState(() {
-                      _selectedValue = value!;
-                      widget.onChanged(_selectedValue);
-                    });
-                  },
-                ),
-                Text(item.text),
-              ],
-            ),
-          )
-          .toList(),
+      children: [
+        for (final item in widget.radioItems)
+          Row(
+            children: [
+              Radio<String>(
+                value: item.value,
+                groupValue: _selectedValue,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedValue = value!;
+                    widget.onChanged(_selectedValue);
+                  });
+                },
+              ),
+              Text(
+                item.text,
+                style: GoogleFonts.poppins(),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }

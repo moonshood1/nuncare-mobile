@@ -82,9 +82,9 @@ class _ConfirmationCodeScreenState extends State<ConfirmationCodeScreen> {
                 margin: const EdgeInsets.only(top: 30),
                 child: InkWell(
                   onTap: () {},
-                  child: const Text(
+                  child: Text(
                     "Renvoyez le code dans ... ",
-                    style: TextStyle(color: primarygreen),
+                    style: GoogleFonts.poppins(color: primarygreen),
                   ),
                 ),
               ),
@@ -147,9 +147,9 @@ class _EmailConfirmationWidgetState extends State<EmailConfirmationWidget> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
-          "Veuillez saisir le code à 6 chiffres qui a été envoyé à exemple@gmail.com",
-          style: TextStyle(
+        Text(
+          "Veuillez saisir le code à 5 chiffres qui a été envoyé à exemple@gmail.com",
+          style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Colors.black,
@@ -203,9 +203,9 @@ class _PhoneConfirmationWidgetState extends State<PhoneConfirmationWidget> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
-          "Veuillez saisir le code à 6 chiffres qui a été envoyé aux numéro +22507.......00",
-          style: TextStyle(
+        Text(
+          "Veuillez saisir le code à 5 chiffres qui a été envoyé au numéro +22507**00",
+          style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Colors.black,

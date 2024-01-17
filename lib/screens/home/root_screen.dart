@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/screens/home/annuary_screen.dart';
+import 'package:nuncare/screens/annuary/root_screen.dart';
 import 'package:nuncare/screens/home/home_screen.dart';
-import 'package:nuncare/screens/home/message_screen.dart';
-import 'package:nuncare/screens/home/profile_screen.dart';
+import 'package:nuncare/screens/message/root_screen.dart';
+import 'package:nuncare/screens/profile/root_screen.dart';
 
 class HomeRootScreen extends StatefulWidget {
   const HomeRootScreen({super.key});
@@ -24,22 +24,47 @@ class _HomeRootScreenState extends State<HomeRootScreen> {
     });
   }
 
+  void goToAnnuaryScreen() {
+    setState(() {
+      _selectedIndex = 1;
+      activeScreen = 1;
+    });
+  }
+
+  void goToMessageScreen() {
+    setState(() {
+      _selectedIndex = 2;
+      activeScreen = 2;
+    });
+  }
+
+  void goToProfileScreen() {
+    setState(() {
+      _selectedIndex = 3;
+      activeScreen = 3;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget screenWidget = const HomeScreen();
+    Widget screenWidget = HomeScreen(
+      goToAnnuary: goToAnnuaryScreen,
+    );
 
     switch (activeScreen) {
       case 1:
-        screenWidget = const AnnuaryScreen();
+        screenWidget = const AnnuaryRootScreen();
         break;
       case 2:
-        screenWidget = const MessageScreen();
+        screenWidget = const MessageRootScreen();
         break;
       case 3:
-        screenWidget = const ProfileScreen();
+        screenWidget = const ProfileRootScreen();
         break;
       default:
-        screenWidget = const HomeScreen();
+        screenWidget = HomeScreen(
+          goToAnnuary: goToAnnuaryScreen,
+        );
     }
 
     return Scaffold(
