@@ -1,20 +1,25 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/constants/api.dart';
+import 'package:nuncare/providers/user_provider.dart';
 import 'package:nuncare/screens/home/root_screen.dart';
 import 'package:nuncare/screens/security/root_screen.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
+import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key, required this.goToRegistration});
 
   final void Function() goToRegistration;
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -29,43 +34,73 @@ class _LoginScreenState extends State<LoginScreen> {
     widget.goToRegistration();
   }
 
-  void checkDataAndProceed() {
-    // recuperer les données saisies dans les deux inputs
-    print(_emailController.text);
-    print(_passwordController.text);
+  void checkDataAndProceed() async {
+    final url = Uri.parse("$baseUrl/auth/login");
 
-    if (_emailController.text.trim() != "louisrogerguirika@gmail.com" &&
-        _passwordController.text.trim() != "12345678") {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Données invalides"),
-          content: const Text(
-            'Les données de connexion saisies ne sont liées à aucun compte , veuillez reessayer',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text(
-                "OK",
-                style: TextStyle(color: primarygreen),
-              ),
-            )
-          ],
-        ),
-      );
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(
+        {
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
+        },
+      ),
+    );
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+
+    String message = responseData['message'];
+
+    if (!context.mounted) {
       return;
     }
 
-    // verifier si elles sont valides ou existent dans la BD
+    if (response.statusCode == 200) {
+      String token = responseData['token'];
+      String id = responseData['id'];
+      String firstName = responseData['firstName'];
+      String lastName = responseData['lastName'];
+      String phoneNumber = responseData['phoneNumber'];
+      String orderNumber = responseData['orderNumber'];
+      String city = responseData['city'];
+      String speciality = responseData['speciality'];
+      String medicalCenter = responseData['medicalCenter'];
+      String email = responseData['email'];
 
-    // si ok , rediriger vers la page finale
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomeRootScreen(),
+      ref.watch(userProvider.notifier).setUser(
+            id: id,
+            token: token,
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber,
+            orderNumber: orderNumber,
+            city: city,
+            speciality: speciality,
+            medicalCenter: medicalCenter,
+            email: email,
+          );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => const HomeRootScreen(),
+        ),
+      );
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: response.statusCode != 200
+            ? Colors.red.shade500
+            : Colors.green.shade200,
+        content: Text(message),
+        duration: const Duration(seconds: 5),
       ),
     );
+
+    return;
   }
 
   @override

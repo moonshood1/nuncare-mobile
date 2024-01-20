@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nuncare/screens/auth/root_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_riverpod'
 
 final theme = ThemeData(
   useMaterial3: false,
@@ -20,10 +22,12 @@ void main() {
     ],
   ).then(
     (value) => runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const RootScreen(),
-        theme: theme,
+      ProviderScope(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: const RootScreen(),
+          theme: theme,
+        ),
       ),
     ),
   );

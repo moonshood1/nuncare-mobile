@@ -48,6 +48,7 @@ class _RootScreenState extends State<RootScreen> {
       case "register-screen":
         screenWidget = RegistrationScreen(
           goToLogin: goToLoginScreen,
+          goToRegistration: gotToRegisterScreen,
         );
         break;
       default:

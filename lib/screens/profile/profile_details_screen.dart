@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/data/articles.dart';
 import 'package:nuncare/models/article.dart';
+import 'package:nuncare/providers/user_provider.dart';
+import 'package:nuncare/screens/auth/login_screen.dart';
 import 'package:nuncare/screens/detail/article_details_screen.dart';
 import 'package:nuncare/screens/home/components/article_card.dart';
 
-class ProfileDetailsScreen extends StatefulWidget {
+class ProfileDetailsScreen extends ConsumerWidget {
   const ProfileDetailsScreen({super.key});
 
   @override
-  State<ProfileDetailsScreen> createState() => _ProfileDetailsScreenState();
-}
-
-class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userDetails = ref.watch(userProvider);
     double coverHeight = 200;
+
+    void disconnect() {
+      ref.watch(userProvider.notifier).resetUser();
+      // Navigator.pop(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (ctx) => LoginScreen(
+      //       goToRegistration: () {},
+      //     ),
+      //   ),
+      // );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green.shade200,
+          content: const Text("Vous avez été deconnecté avec succès"),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       child: Column(
@@ -27,16 +46,24 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
             height: 60,
             width: double.infinity,
             color: Colors.white,
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Profil",
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Profil",
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-              ),
+                IconButton(
+                  onPressed: disconnect,
+                  icon: const Icon(Icons.logout),
+                )
+              ],
             ),
           ),
           Stack(
@@ -73,7 +100,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Amélia Renata",
+                    "${userDetails.firstName} ${userDetails.lastName}",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 22,
@@ -87,7 +114,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Cardiologue",
+                    userDetails.speciality,
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w200,

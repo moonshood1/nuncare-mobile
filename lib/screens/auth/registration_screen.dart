@@ -1,16 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/constants/api.dart';
 import 'package:nuncare/data/resources.dart';
+import 'package:nuncare/screens/auth/login_screen.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
+import 'package:http/http.dart' as http;
 
 final formatter = DateFormat.yMd();
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key, required this.goToLogin});
+  const RegistrationScreen(
+      {super.key, required this.goToLogin, required this.goToRegistration});
 
   final void Function() goToLogin;
+  final void Function() goToRegistration;
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -34,15 +40,52 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     widget.goToLogin();
   }
 
-  void register() {
-    print(_firstNameController.text);
-    print(_lastNameController.text);
-    print(_phoneController.text);
-    print(_orderNumberController.text);
-    print(_medicalCenterController.text);
-    print(_emailController.text);
-    print(_passwordController.text);
-    print(_repeatedPasswordController.text);
+  void register() async {
+    final url = Uri.parse("$baseUrl/auth/register");
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(
+        {
+          'firstName': _firstNameController.text.trim(),
+          'lastName': _lastNameController.text.trim(),
+          'phoneNumber': _phoneController.text.trim(),
+          'orderNumber': _orderNumberController.text.trim(),
+          'region': _selectedRegion.trim(),
+          'city': _selectedCity.trim(),
+          'speciality': _selectedSpeciality.trim(),
+          'medialCenter': _medicalCenterController.text.trim(),
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim()
+        },
+      ),
+    );
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    String message = responseData['message'];
+
+    if (!context.mounted) {
+      return;
+    }
+
+    if (response.statusCode == 200) {
+      goToLoginScreen();
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: response.statusCode != 200
+            ? Colors.red.shade500
+            : Colors.green.shade200,
+        content: Text(message),
+        duration: const Duration(seconds: 5),
+      ),
+    );
+
+    return;
   }
 
   @override
@@ -432,6 +475,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             validator: (value) {
                               if ((value ?? '').length < 6) {
                                 return 'Le mot de passe doit avoir au moins 6 caractères';
+                              }
+
+                              if (_passwordController.text.isNotEmpty &&
+                                  value != _passwordController.text.trim()) {
+                                return 'Les deux mots de passe ne sont pas identiques';
                               }
                               return null;
                             },
