@@ -10,12 +10,16 @@ class CustomTextField extends StatefulWidget {
     required this.validator,
     required this.isDate,
     required this.controller,
+    this.maxLength,
+    this.maxLines,
     super.key,
   });
 
   final IconData icon;
   final String hintText;
   final bool isHidden;
+  int? maxLength;
+  int? maxLines;
 
   final bool isDate;
   final String? Function(String?) validator;
@@ -39,6 +43,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         style: GoogleFonts.poppins(),
         obscureText: widget.isHidden,
+        maxLength: widget.maxLength,
+        maxLines: widget.maxLines ?? 1,
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: const TextStyle(

@@ -205,7 +205,6 @@ class HomeScreen extends StatelessWidget {
                 runSpacing: 10,
                 children: <Widget>[
                   ...articles
-                      .where((article) => article.readingTime != "7")
                       .map((article) => ArticleCard(article: article))
                       .toList(),
                   const SizedBox(

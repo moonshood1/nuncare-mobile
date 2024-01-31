@@ -25,7 +25,7 @@ class ArticleDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(
-                article.image,
+                article.img,
               ),
               const SizedBox(
                 height: 10,

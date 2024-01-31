@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ProfileEditScreen extends StatefulWidget {
-  const ProfileEditScreen({super.key});
+class ProfileModal extends StatefulWidget {
+  const ProfileModal({super.key});
 
   @override
-  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
+  State<ProfileModal> createState() => _ProfileModalState();
 }
 
-class _ProfileEditScreenState extends State<ProfileEditScreen> {
+class _ProfileModalState extends State<ProfileModal> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

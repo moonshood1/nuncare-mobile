@@ -13,7 +13,6 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String finalReadingTime = '${article.readingTime} min';
     String finalAuthor = 'Auteur : ${article.author}';
 
     return GestureDetector(
@@ -46,7 +45,7 @@ class ArticleCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Image.asset(
-              article.image,
+              article.img,
               width: 100,
             ),
             const SizedBox(
@@ -88,14 +87,6 @@ class ArticleCard extends StatelessWidget {
                       ),
                       const SizedBox(
                         width: 10,
-                      ),
-                      Text(
-                        finalReadingTime,
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 11,
-                          color: Colors.grey,
-                        ),
                       ),
                     ],
                   ),

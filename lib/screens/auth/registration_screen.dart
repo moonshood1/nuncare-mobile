@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/constants/api.dart';
-import 'package:nuncare/data/resources.dart';
-import 'package:nuncare/screens/auth/login_screen.dart';
+import 'package:nuncare/services/auth_service.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
-import 'package:http/http.dart' as http;
 
 final formatter = DateFormat.yMd();
 
@@ -32,60 +28,59 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatedPasswordController = TextEditingController();
-  String _selectedRegion = regions[0];
-  String _selectedCity = cities[0];
-  String _selectedSpeciality = specialities[0];
+  final _regionController = TextEditingController();
+  final _specialityController = TextEditingController();
+  final _cityController = TextEditingController();
 
   void goToLoginScreen() {
     widget.goToLogin();
   }
 
   void register() async {
-    final url = Uri.parse("$baseUrl/auth/register");
+    try {
+      Map<String, String> userData = {
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'phoneNumber': _phoneController.text.trim(),
+        'orderNumber': _orderNumberController.text.trim(),
+        'region': _regionController.text.trim(),
+        'city': _cityController.text.trim(),
+        'speciality': _specialityController.text.trim(),
+        'medialCenter': _medicalCenterController.text.trim(),
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text.trim()
+      };
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(
-        {
-          'firstName': _firstNameController.text.trim(),
-          'lastName': _lastNameController.text.trim(),
-          'phoneNumber': _phoneController.text.trim(),
-          'orderNumber': _orderNumberController.text.trim(),
-          'region': _selectedRegion.trim(),
-          'city': _selectedCity.trim(),
-          'speciality': _selectedSpeciality.trim(),
-          'medialCenter': _medicalCenterController.text.trim(),
-          'email': _emailController.text.trim(),
-          'password': _passwordController.text.trim()
-        },
-      ),
-    );
+      BasicResponse response = await AuthService().register(userData);
 
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    String message = responseData['message'];
+      if (response.success) {
+        goToLoginScreen();
+      }
 
-    if (!context.mounted) {
+      if (!context.mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green.shade200,
+          content: Text(response.message),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+
       return;
+    } catch (e) {
+      print(e);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade500,
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     }
-
-    if (response.statusCode == 200) {
-      goToLoginScreen();
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: response.statusCode != 200
-            ? Colors.red.shade500
-            : Colors.green.shade200,
-        content: Text(message),
-        duration: const Duration(seconds: 5),
-      ),
-    );
-
-    return;
   }
 
   @override
@@ -108,21 +103,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         height: double.infinity,
         child: Column(
           children: [
-            // const SizedBox(height: 30),
-            // Image.asset(
-            //   "assets/images/logo_nuncare.png",
-            //   width: 60,
-            // ),
-            // const SizedBox(height: 30),
-            // Text(
-            //   "Inscrivez-vous sur Nuncare",
-            //   textAlign: TextAlign.center,
-            //   style: GoogleFonts.poppins(
-            //     color: Colors.black,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 25,
-            //   ),
-            // ),
             const SizedBox(height: 30),
             Expanded(
               child: Theme(
@@ -160,7 +140,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
                             child: Text(
-                              currentStep != 2 ? "Continuer" : "Soumettre",
+                              currentStep != 3 ? "Continuer" : "Soumettre",
                               style: GoogleFonts.poppins(fontSize: 15),
                             ),
                           ),
@@ -272,93 +252,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             isHidden: false,
                             isDate: false,
                             validator: (value) {
-                              if ((value ?? '').length < 8) {
-                                return 'Le numéro doit avoir au moins 8 caractères';
+                              if ((value ?? '').length < 4) {
+                                return 'Le numéro doit avoir au moins 4 caractères';
                               }
                               return null;
                             },
                           ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: primarygreen, width: 0.7),
-                            ),
-                            child: DropdownButton(
-                              style: GoogleFonts.poppins(
-                                  color: Colors.grey, fontSize: 14),
-                              isExpanded: true,
-                              focusColor: primarygreen,
-                              underline: const SizedBox(),
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                color: primarygreen,
-                              ),
-                              hint: const Text("Region d'exercice"),
-                              value: _selectedRegion,
-                              items: regions
-                                  .map(
-                                    (region) => DropdownMenuItem(
-                                      value: region,
-                                      child: Text(
-                                        region.toUpperCase(),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value == null) {
-                                  return;
-                                }
-                                setState(() {
-                                  _selectedRegion = value;
-                                });
-                              },
-                            ),
+                          CustomTextField(
+                            controller: _regionController,
+                            hintText: "Région d'exercice",
+                            icon: Icons.map,
+                            isHidden: false,
+                            isDate: false,
+                            validator: (value) {
+                              if ((value ?? '').length < 3) {
+                                return 'Le numéro doit avoir au moins 3 caractères';
+                              }
+                              return null;
+                            },
                           ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: primarygreen, width: 0.7),
-                            ),
-                            child: DropdownButton(
-                              style: GoogleFonts.poppins(
-                                  color: Colors.grey, fontSize: 14),
-                              isExpanded: true,
-                              focusColor: primarygreen,
-                              underline: const SizedBox(),
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                color: primarygreen,
-                              ),
-                              hint: const Text("Ville d'exercice"),
-                              value: _selectedCity,
-                              items: cities
-                                  .map(
-                                    (city) => DropdownMenuItem(
-                                      value: city,
-                                      child: Text(
-                                        city.toUpperCase(),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value == null) {
-                                  return;
-                                }
-                                setState(() {
-                                  _selectedCity = value;
-                                });
-                              },
-                            ),
+                          CustomTextField(
+                            controller: _cityController,
+                            hintText: "Ville d'exercice",
+                            icon: Icons.location_city,
+                            isHidden: false,
+                            isDate: false,
+                            validator: (value) {
+                              if ((value ?? '').length < 3) {
+                                return 'La ville doit avoir au moins 3 caractères';
+                              }
+                              return null;
+                            },
                           ),
                           CustomTextField(
                             controller: _medicalCenterController,
@@ -373,46 +297,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               return null;
                             },
                           ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: primarygreen, width: 0.7),
-                            ),
-                            child: DropdownButton(
-                              style: GoogleFonts.poppins(
-                                  color: Colors.grey, fontSize: 14),
-                              isExpanded: true,
-                              focusColor: primarygreen,
-                              underline: const SizedBox(),
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                color: primarygreen,
-                              ),
-                              hint: const Text("Specialité"),
-                              value: _selectedSpeciality,
-                              items: specialities
-                                  .map(
-                                    (speciality) => DropdownMenuItem(
-                                      value: speciality,
-                                      child: Text(
-                                        speciality.toUpperCase(),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value == null) {
-                                  return;
-                                }
-                                setState(() {
-                                  _selectedSpeciality = value;
-                                });
-                              },
-                            ),
+                          CustomTextField(
+                            controller: _specialityController,
+                            hintText: "Spécialité",
+                            icon: Icons.file_copy,
+                            isHidden: false,
+                            isDate: false,
+                            validator: (value) {
+                              if ((value ?? '').length < 5) {
+                                return 'La specialité doit avoir au moins 5 caractères';
+                              }
+                              return null;
+                            },
                           ),
                         ],
                       ),
@@ -486,7 +382,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/data/articles.dart';
 import 'package:nuncare/models/doctor.dart';
+import 'package:nuncare/screens/profile/components/article_widget.dart';
 import 'package:nuncare/screens/profile/profile_details_screen.dart';
 
 class DetailsRootScreen extends StatelessWidget {

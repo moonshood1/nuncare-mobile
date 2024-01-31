@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/constants/api.dart';
-import 'package:nuncare/providers/user_provider.dart';
 import 'package:nuncare/screens/home/root_screen.dart';
 import 'package:nuncare/screens/security/root_screen.dart';
+import 'package:nuncare/services/account_service.dart';
+import 'package:nuncare/services/auth_service.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
-import 'package:http/http.dart' as http;
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key, required this.goToRegistration});
@@ -34,73 +32,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     widget.goToRegistration();
   }
 
-  void checkDataAndProceed() async {
-    final url = Uri.parse("$baseUrl/auth/login");
+  void login() async {
+    try {
+      LoginResponse response = await AuthService().login(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(
-        {
-          'email': _emailController.text.trim(),
-          'password': _passwordController.text.trim(),
-        },
-      ),
-    );
+      await AccountService.storeToken(response.token);
 
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    String message = responseData['message'];
-
-    if (!context.mounted) {
-      return;
-    }
-
-    if (response.statusCode == 200) {
-      String token = responseData['token'];
-      String id = responseData['id'];
-      String firstName = responseData['firstName'];
-      String lastName = responseData['lastName'];
-      String phoneNumber = responseData['phoneNumber'];
-      String orderNumber = responseData['orderNumber'];
-      String city = responseData['city'];
-      String speciality = responseData['speciality'];
-      String medicalCenter = responseData['medicalCenter'];
-      String email = responseData['email'];
-
-      ref.watch(userProvider.notifier).setUser(
-            id: id,
-            token: token,
-            firstName: firstName,
-            lastName: lastName,
-            phoneNumber: phoneNumber,
-            orderNumber: orderNumber,
-            city: city,
-            speciality: speciality,
-            medicalCenter: medicalCenter,
-            email: email,
-          );
+      if (!context.mounted) {
+        return;
+      }
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (ctx) => const HomeRootScreen(),
         ),
       );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green.shade200,
+          content: Text(response.message),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+
+      return;
+    } catch (e) {
+      print(e);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade500,
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: response.statusCode != 200
-            ? Colors.red.shade500
-            : Colors.green.shade200,
-        content: Text(message),
-        duration: const Duration(seconds: 5),
-      ),
-    );
-
-    return;
   }
 
   @override
@@ -192,7 +162,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                     child: ElevatedButton(
-                      onPressed: checkDataAndProceed,
+                      onPressed: login,
                       style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: primarygreen,
