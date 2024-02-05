@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nuncare/common/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nuncare/data/doctors.dart';
-import 'package:nuncare/data/pharmacies.dart';
-import 'package:nuncare/screens/home/components/pharmacy_card.dart';
-import 'package:nuncare/screens/home/components/profile_card.dart';
+import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/models/instance.dart';
+import 'package:nuncare/models/user.dart';
+import 'package:nuncare/screens/annuary/components/research_map.dart';
+import 'package:nuncare/services/annuary_service.dart';
+import 'package:nuncare/shared/custom_input_field.dart';
 
 class AnnuaryRootScreen extends StatefulWidget {
   const AnnuaryRootScreen({super.key});
@@ -14,147 +15,118 @@ class AnnuaryRootScreen extends StatefulWidget {
 }
 
 class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
-  int _selectedIndex = 0;
+  var annuaryService = AnnuaryService();
 
-  void updateCategory(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  final _searchTextController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Text(
-              _selectedIndex == 0 ? "Docteurs" : "Pharmacies",
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            AnnuaryCategory(updateCategory: updateCategory),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
-      ),
+  List<User> doctors = [];
+  List<Instance> instances = [];
+
+  void _showMapDialog() async {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => const ResearchMap(),
     );
   }
-}
 
-class AnnuaryCategory extends StatefulWidget {
-  const AnnuaryCategory({
-    super.key,
-    required this.updateCategory,
-  });
+  void _searchInstance() async {
+    try {
+      final response = await annuaryService.searchInstance(
+        _searchTextController.text.trim(),
+      );
 
-  final Function(int) updateCategory;
-
-  @override
-  State<AnnuaryCategory> createState() => _AnnuaryCategoryState();
-}
-
-class _AnnuaryCategoryState extends State<AnnuaryCategory> {
-  final List<String> categories = [
-    "assets/icons/doctor_icon.png",
-    "assets/icons/pharmacy_icon.png",
-    "assets/icons/medicine_icon.png",
-  ];
-
-  int _selectedIndex = 0;
-
-  void setCurrentIndex(int index) {
-    setState(() {
-      _selectedIndex = index;
-      widget.updateCategory(index);
-    });
+      print(response);
+    } catch (e) {
+      print(e);
+    }
   }
-
-  final List<List<Widget>> dataDisplayed = [
-    doctors
-        .map(
-          (doctor) => ProfileCard(
-            doctor: doctor,
-          ),
-        )
-        .toList(),
-    pharmacies
-        .map(
-          (pharmacy) => PharmacyCard(
-            pharmacy: pharmacy,
-          ),
-        )
-        .toList(),
-    pharmacies
-        .map(
-          (pharmacy) => PharmacyCard(
-            pharmacy: pharmacy,
-          ),
-        )
-        .toList(),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 70,
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: categories.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-              decoration: _selectedIndex == index
-                  ? const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: primarygreen, width: 3),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 52, 51, 51),
                       ),
-                    )
-                  : const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide.none,
-                      ),
-                    ),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 3),
-                child: ElevatedButton(
-                  onPressed: () => setCurrentIndex(index),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(70, 70),
-                    backgroundColor: primarygreen,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      "Trouvez tous les experts de santé",
                     ),
                   ),
-                  child: Image.asset(
-                    categories[index],
-                    height: 40,
+                  TextButton(
+                    onPressed: _showMapDialog,
+                    child: const Center(
+                      child: Icon(
+                        Icons.location_on,
+                        size: 32,
+                        color: Color.fromARGB(255, 52, 51, 51),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: CustomTextField(
+                      controller: _searchTextController,
+                      hintText: "Recherchez un hopital ou une pharmacie",
+                      icon: Icons.search,
+                      isHidden: false,
+                      isDate: false,
+                      validator: (value) {
+                        if ((value ?? '').length < 3) {
+                          return 'Le texte de recherche doit avoir au moins 3 caractères';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _searchInstance,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: primarygreen,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.search,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 40),
-        SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: dataDisplayed[_selectedIndex],
-          ),
-        )
-      ],
+      ),
     );
   }
 }

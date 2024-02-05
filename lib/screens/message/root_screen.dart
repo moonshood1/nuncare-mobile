@@ -15,19 +15,11 @@ class _MessageRootScreenState extends State<MessageRootScreen> {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Text(
-              "Messages",
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500,
-                fontSize: 22,
-                color: Colors.black.withOpacity(0.7),
-              ),
-            ),
-            const SizedBox(
+          children: const <Widget>[
+            SizedBox(
               height: 40,
             ),
-            const Text(
+            Text(
               "TO DO : Implementation du backend / service de messagerie",
             )
           ],

@@ -1,5 +1,6 @@
 class Article {
-  const Article({
+  Article({
+    required this.id,
     required this.img,
     required this.title,
     required this.description,
@@ -8,15 +9,11 @@ class Article {
     required this.content,
   });
 
-  final String img;
-  final String title;
-  final String author;
-  final String description;
-  final String createdAt;
-  final String content;
+  String id, img, title, author, description, createdAt, content;
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
+      id: json["_id"],
       img: json['img'],
       title: json['title'],
       author: json['author'],

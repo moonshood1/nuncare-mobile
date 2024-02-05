@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/article.dart';
 
 class ArticleDetailsScreen extends StatelessWidget {
@@ -10,8 +11,9 @@ class ArticleDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        // backgroundColor: Colors.white,
+        // foregroundColor: Colors.black,
+        backgroundColor: primarygreen,
         elevation: 2,
       ),
       body: Container(

@@ -47,30 +47,36 @@ class _HomeRootScreenState extends State<HomeRootScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget screenWidget = HomeScreen(
-      goToAnnuary: goToAnnuaryScreen,
-    );
+    Widget screenWidget = const HomeScreen();
+
+    String screenTitle = "Accueil";
 
     switch (activeScreen) {
       case 1:
         screenWidget = const AnnuaryRootScreen();
+        screenTitle = "Annuaire";
         break;
       case 2:
         screenWidget = const MessageRootScreen();
+        screenTitle = "Messagerie";
         break;
       case 3:
         screenWidget = const ProfileRootScreen();
+        screenTitle = "Profil";
         break;
       default:
-        screenWidget = HomeScreen(
-          goToAnnuary: goToAnnuaryScreen,
-        );
+        screenWidget = const HomeScreen();
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: screenWidget,
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          screenTitle,
+        ),
+        backgroundColor: primarygreen,
       ),
+      body: screenWidget,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: primarygreen,

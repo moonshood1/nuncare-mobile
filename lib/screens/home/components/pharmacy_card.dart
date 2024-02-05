@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/models/pharmacy.dart';
+import 'package:nuncare/models/instance.dart';
+
 import 'package:nuncare/screens/detail/pharmacy_details_screen.dart';
 
 class PharmacyCard extends StatelessWidget {
@@ -10,7 +11,7 @@ class PharmacyCard extends StatelessWidget {
     super.key,
   });
 
-  final Pharmacy pharmacy;
+  final Instance pharmacy;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class PharmacyCard extends StatelessWidget {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(50)),
               child: Image.asset(
-                pharmacy.picture,
+                pharmacy.img,
                 height: 80,
               ),
             ),
@@ -55,10 +56,10 @@ class PharmacyCard extends StatelessWidget {
             const SizedBox(
               height: 3,
             ),
-            Text(
-              pharmacy.location,
-              style: GoogleFonts.poppins(color: Colors.grey, fontSize: 15),
-            ),
+            // Text(
+            //   pharmacy.location,
+            //   style: GoogleFonts.poppins(color: Colors.grey, fontSize: 15),
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -73,17 +74,17 @@ class PharmacyCard extends StatelessWidget {
                     color: primarygreen.shade100,
                   ),
                   child: Row(
-                    children: <Widget>[
-                      const Icon(
+                    children: const <Widget>[
+                      Icon(
                         Icons.star,
                         color: primarygreen,
                         size: 18,
                       ),
-                      Text(
-                        pharmacy.stars.toString(),
-                        style: GoogleFonts.poppins(
-                            color: primarygreen, fontSize: 12),
-                      ),
+                      // Text(
+                      //   pharmacy.stars.toString(),
+                      //   style: GoogleFonts.poppins(
+                      //       color: primarygreen, fontSize: 12),
+                      // ),
                     ],
                   ),
                 ),

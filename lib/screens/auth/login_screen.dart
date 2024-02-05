@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/screens/home/root_screen.dart';
+// import 'package:nuncare/screens/root_screen.dart';
 import 'package:nuncare/screens/security/root_screen.dart';
 import 'package:nuncare/services/account_service.dart';
 import 'package:nuncare/services/auth_service.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
+import 'package:nuncare/screens/root_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key, required this.goToRegistration});
@@ -46,9 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => const HomeRootScreen(),
-        ),
+        MaterialPageRoute(builder: (ctx) => const HomeRootScreen()),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

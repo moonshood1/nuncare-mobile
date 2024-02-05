@@ -64,27 +64,6 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            height: 60,
-            width: double.infinity,
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Profil",
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           Stack(
             children: <Widget>[
               SizedBox(
@@ -145,21 +124,21 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                     context,
                     const AboutModal(),
                   ),
-                  aboutText: user.about ?? '',
+                  aboutText: user.about,
                 ),
                 XpWidget(
                   openXpOverlay: () => _openEditingModal(
                     context,
                     const ExperienceModal(),
                   ),
-                  experiences: user.experiences ?? [],
+                  experiences: user.experiences,
                 ),
                 SkillWidget(
                   openSkillOverlay: () => _openEditingModal(
                     context,
                     const SkillModal(),
                   ),
-                  skills: user.skills ?? [],
+                  skills: user.skills,
                 ),
                 ArticleWidget(
                   openArticleOverlay: () => _openEditingModal(

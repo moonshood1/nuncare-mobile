@@ -27,7 +27,7 @@ class MedocCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset(
-            medecine.image,
+            medecine.img,
             height: 70,
           ),
           const SizedBox(

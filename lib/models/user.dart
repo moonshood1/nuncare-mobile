@@ -1,63 +1,114 @@
 class User {
-  const User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    this.about,
-    required this.phone,
-    required this.orderNumber,
-    required this.city,
-    required this.speciality,
-    required this.hospital,
-    required this.email,
-    this.skills,
-    this.experiences,
-  });
+  String id;
+  String firstName;
+  String lastName;
+  String about;
+  String type;
+  String sex;
+  String hospital;
+  String speciality;
+  int years;
+  String img;
+  String phone;
+  String region;
+  String city;
+  String email;
+  String password;
+  String orderNumber;
+  List<String> skills;
+  List<String> experiences;
+  bool isActive;
 
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String orderNumber;
-  final String city;
-  final String speciality;
-  final String hospital;
-  final String email;
-  final String? about;
-  final List<dynamic>? skills;
-  final List<dynamic>? experiences;
+  User(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.about,
+      required this.type,
+      required this.sex,
+      required this.hospital,
+      required this.speciality,
+      required this.years,
+      required this.img,
+      required this.phone,
+      required this.region,
+      required this.city,
+      required this.email,
+      required this.password,
+      required this.orderNumber,
+      required this.skills,
+      required this.experiences,
+      required this.isActive});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['_id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      about: json['about'],
-      phone: json['phone'],
-      orderNumber: json['orderNumber'],
-      city: json['city'],
+      about: json['about'] ?? '',
+      type: json['type'] ?? '',
+      sex: json['sex'] ?? '',
+      hospital: json['hospital'] ?? '',
       speciality: json['speciality'],
-      hospital: json['hospital'],
+      years: json['years'] ?? 0,
+      img: json['img'] ?? '',
+      phone: json['phone'],
+      region: json['region'],
+      city: json['city'],
       email: json['email'],
-      skills: json['skills'],
-      experiences: json['experiences'],
+      password: json['password'],
+      orderNumber: json['orderNumber'],
+      isActive: json['isActive'],
+      skills: List<String>.from(json['skills'] ?? []),
+      experiences: List<String>.from(json['experiences'] ?? []),
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'about': about,
+      'type': type,
+      'sex': sex,
+      'hospital': hospital,
+      'speciality': speciality,
+      'years': years,
+      'img': img,
+      'phone': phone,
+      'region': region,
+      'city': city,
+      'email': email,
+      'password': password,
+      'orderNumber': orderNumber,
+      'skills': skills,
+      'experiences': experiences,
+      'isActive': isActive
+    };
+  }
+
   factory User.defaultUser() {
-    return const User(
+    return User(
       id: '',
       firstName: '',
       lastName: '',
-      phone: '',
-      orderNumber: '',
-      city: '',
-      speciality: '',
-      hospital: '',
-      email: '',
       about: '',
+      type: '',
+      sex: '',
+      hospital: '',
+      speciality: '',
+      years: 0,
+      img: '',
+      phone: '',
+      region: '',
+      city: '',
+      email: '',
+      password: '',
+      orderNumber: '',
       skills: [],
       experiences: [],
+      isActive: true,
     );
   }
 }

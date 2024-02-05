@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/models/pharmacy.dart';
+import 'package:nuncare/models/instance.dart';
 
 class PharmacyDetailsScreen extends StatelessWidget {
   const PharmacyDetailsScreen({super.key, required this.pharmacy});
 
-  final Pharmacy pharmacy;
+  final Instance pharmacy;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class PharmacyDetailsScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: Image.asset(
-                      pharmacy.cover,
+                      pharmacy.img,
                       fit: BoxFit.cover,
                       height: coverHeight,
                     ),
@@ -47,7 +47,7 @@ class PharmacyDetailsScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 50.0,
-                            backgroundImage: AssetImage(pharmacy.picture),
+                            backgroundImage: AssetImage(pharmacy.img),
                           ),
                           const SizedBox(
                             height: 5,
@@ -63,42 +63,42 @@ class PharmacyDetailsScreen extends StatelessWidget {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(
-                            pharmacy.location,
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          // Text(
+                          //   pharmacy.position.lat,
+                          //   style: GoogleFonts.poppins(
+                          //     fontWeight: FontWeight.w400,
+                          //     fontSize: 16,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Icon(
+                            children: const <Widget>[
+                              Icon(
                                 Icons.star,
                                 color: primarygreen,
                                 size: 18,
                               ),
-                              Text(
-                                pharmacy.stars.toString(),
-                                style: GoogleFonts.poppins(
-                                  color: primarygreen,
-                                  fontSize: 14,
-                                ),
-                              ),
+                              // Text(
+                              //   pharmacy.stars.toString(),
+                              //   style: GoogleFonts.poppins(
+                              //     color: primarygreen,
+                              //     fontSize: 14,
+                              //   ),
+                              // ),
                             ],
                           ),
                           const SizedBox(
                             height: 5,
                           ),
-                          Text(
-                            pharmacy.isGuard ? "De garde" : "Pas de garde",
-                            style: GoogleFonts.poppins(
-                                color: pharmacy.isGuard
-                                    ? primarygreen
-                                    : Colors.red.withOpacity(0.5),
-                                fontSize: 12),
-                          )
+                          // Text(
+                          //   pharmacy.isGuard ? "De garde" : "Pas de garde",
+                          //   style: GoogleFonts.poppins(
+                          //       color: pharmacy.isGuard
+                          //           ? primarygreen
+                          //           : Colors.red.withOpacity(0.5),
+                          //       fontSize: 12),
+                          // )
                         ],
                       ),
                     ),
@@ -124,14 +124,14 @@ class PharmacyDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       height: 15,
                     ),
-                    Text(
-                      pharmacy.description,
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    // Text(
+                    //   pharmacy.description,
+                    //   style: GoogleFonts.poppins(
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.w300,
+                    //     color: Colors.grey,
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 20,
                     ),

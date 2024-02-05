@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/data/articles.dart';
-import 'package:nuncare/models/doctor.dart';
+import 'package:nuncare/models/user.dart';
 import 'package:nuncare/screens/profile/components/article_widget.dart';
 import 'package:nuncare/screens/profile/profile_details_screen.dart';
 
 class DetailsRootScreen extends StatelessWidget {
   const DetailsRootScreen({super.key, required this.doctor});
 
-  final Doctor doctor;
+  final User doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +17,9 @@ class DetailsRootScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        // backgroundColor: Colors.white,
+        // foregroundColor: Colors.black,
+        backgroundColor: primarygreen,
         elevation: 2,
       ),
       body: Container(
@@ -51,7 +52,7 @@ class DetailsRootScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 50.0,
-                            backgroundImage: AssetImage(doctor.picture),
+                            backgroundImage: AssetImage(doctor.img),
                           ),
                           const SizedBox(
                             height: 5,
@@ -64,26 +65,26 @@ class DetailsRootScreen extends StatelessWidget {
                                 color: primarygreen,
                                 size: 18,
                               ),
-                              Text(
-                                doctor.stars.toString(),
-                                style: GoogleFonts.poppins(
-                                  color: primarygreen,
-                                  fontSize: 14,
-                                ),
-                              ),
+                              // Text(
+                              //   doctor.stars.toString(),
+                              //   style: GoogleFonts.poppins(
+                              //     color: primarygreen,
+                              //     fontSize: 14,
+                              //   ),
+                              // ),
                             ],
                           ),
                           const SizedBox(
                             height: 5,
                           ),
-                          Text(
-                            doctor.isActive ? "Disponible" : "Indisponible",
-                            style: GoogleFonts.poppins(
-                                color: doctor.isActive
-                                    ? primarygreen
-                                    : Colors.red.withOpacity(0.5),
-                                fontSize: 12),
-                          )
+                          // Text(
+                          //   doctor.isActive ? "Disponible" : "Indisponible",
+                          //   style: GoogleFonts.poppins(
+                          //       color: doctor.isActive
+                          //           ? primarygreen
+                          //           : Colors.red.withOpacity(0.5),
+                          //       fontSize: 12),
+                          // )
                         ],
                       ),
                     ),
@@ -104,7 +105,7 @@ class DetailsRootScreen extends StatelessWidget {
                         Column(
                           children: [
                             Text(
-                              doctor.name,
+                              "${doctor.firstName} ${doctor.lastName}",
                               style: GoogleFonts.poppins(
                                 color: Colors.black.withOpacity(0.7),
                                 fontSize: 19,
@@ -115,7 +116,7 @@ class DetailsRootScreen extends StatelessWidget {
                               height: 1,
                             ),
                             Text(
-                              doctor.role,
+                              doctor.speciality,
                               style: GoogleFonts.poppins(
                                 color: Colors.grey,
                                 fontSize: 16,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/models/doctor.dart';
+import 'package:nuncare/models/user.dart';
 import 'package:nuncare/screens/detail/profile_details_screen.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -10,11 +10,11 @@ class ProfileCard extends StatelessWidget {
     super.key,
   });
 
-  final Doctor doctor;
+  final User doctor;
 
   @override
   Widget build(BuildContext context) {
-    String finalPosition = '${doctor.position} km';
+    String finalPosition = '5 km';
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -40,7 +40,7 @@ class ProfileCard extends StatelessWidget {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(50)),
               child: Image.asset(
-                doctor.picture,
+                doctor.img,
                 height: 80,
               ),
             ),
@@ -48,7 +48,7 @@ class ProfileCard extends StatelessWidget {
               height: 3,
             ),
             Text(
-              doctor.name,
+              "${doctor.firstName} ${doctor.lastName}",
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold, fontSize: 18),
@@ -57,7 +57,7 @@ class ProfileCard extends StatelessWidget {
               height: 3,
             ),
             Text(
-              doctor.role,
+              doctor.speciality,
               style: GoogleFonts.poppins(color: Colors.grey, fontSize: 15),
             ),
             const SizedBox(
@@ -74,17 +74,17 @@ class ProfileCard extends StatelessWidget {
                     color: primarygreen.shade100,
                   ),
                   child: Row(
-                    children: <Widget>[
-                      const Icon(
+                    children: const <Widget>[
+                      Icon(
                         Icons.star,
                         color: primarygreen,
                         size: 18,
                       ),
-                      Text(
-                        doctor.stars.toString(),
-                        style: GoogleFonts.poppins(
-                            color: primarygreen, fontSize: 12),
-                      ),
+                      // Text(
+                      //   doctor.stars.toString(),
+                      //   style: GoogleFonts.poppins(
+                      //       color: primarygreen, fontSize: 12),
+                      // ),
                     ],
                   ),
                 ),
