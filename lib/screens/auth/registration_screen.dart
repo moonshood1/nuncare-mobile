@@ -31,6 +31,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _regionController = TextEditingController();
   final _specialityController = TextEditingController();
   final _cityController = TextEditingController();
+  var _isLoading = false;
 
   void goToLoginScreen() {
     widget.goToLogin();
@@ -38,6 +39,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void register() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       Map<String, String> userData = {
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
@@ -54,6 +58,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       BasicResponse response = await AuthService().register(userData);
 
       if (response.success) {
+        setState(() {
+          _isLoading = false;
+        });
         goToLoginScreen();
       }
 
@@ -71,7 +78,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       return;
     } catch (e) {
-      print(e);
+      setState(() {
+        _isLoading = false;
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

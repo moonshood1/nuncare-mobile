@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 // import 'package:nuncare/screens/root_screen.dart';
@@ -9,18 +8,19 @@ import 'package:nuncare/services/auth_service.dart';
 import 'package:nuncare/shared/custom_input_field.dart';
 import 'package:nuncare/screens/root_screen.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.goToRegistration});
 
   final void Function() goToRegistration;
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  var _isLoading = false;
 
   @override
   void dispose() {
@@ -35,12 +35,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void login() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       LoginResponse response = await AuthService().login(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
 
       await AccountService.storeToken(response.token);
+
+      setState(() {
+        _isLoading = false;
+      });
 
       if (!context.mounted) {
         return;
@@ -60,7 +67,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       return;
     } catch (e) {
-      print(e);
+      setState(() {
+        _isLoading = false;
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -161,7 +170,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                     child: ElevatedButton(
-                      onPressed: login,
+                      onPressed: _isLoading ? null : login,
                       style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: primarygreen,

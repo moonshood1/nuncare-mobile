@@ -70,129 +70,138 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Stack(children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/images/add_1.png',
-                  height: 150,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text(
+          "Accueil",
+        ),
+        backgroundColor: primarygreen,
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Stack(children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/images/add_1.png',
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  height: 120,
                   width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                height: 120,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(5)),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Spacer(),
-                    Center(
-                      child: Text(
-                        style: GoogleFonts.poppins(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(5)),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      Center(
+                        child: Text(
+                          style: GoogleFonts.poppins(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          "Espace publicitaire",
                         ),
-                        "Espace publicitaire",
                       ),
-                    ),
-                    const Spacer(),
-                  ],
+                      const Spacer(),
+                    ],
+                  ),
                 ),
+              ]),
+              const SizedBox(
+                height: 40,
               ),
-            ]),
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Medicaments assurés",
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    color: const Color.fromARGB(255, 52, 51, 51),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MedecinesScreen(medecines: medecines),
-                    ),
-                  ),
-                  child: Text(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Medicaments assurés",
                     style: GoogleFonts.poppins(
-                      fontSize: 13,
-                      color: primarygreen,
-                      decoration: TextDecoration.underline,
-                    ),
-                    "Voir tout",
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const MedocList(),
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Le Journal",
-                  style: GoogleFonts.poppins(
                       fontSize: 15,
                       color: const Color.fromARGB(255, 52, 51, 51),
-                      fontWeight: FontWeight.bold),
-                ),
-                InkWell(
-                  splashColor: primarygreen,
-                  onTap: () {
-                    Navigator.push(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DiaryScreen(
-                          articles: articles,
-                        ),
+                        builder: (context) =>
+                            MedecinesScreen(medecines: medecines),
                       ),
-                    );
-                  },
-                  child: Text(
-                    style: GoogleFonts.poppins(
+                    ),
+                    child: Text(
+                      style: GoogleFonts.poppins(
                         fontSize: 13,
                         color: primarygreen,
-                        decoration: TextDecoration.underline),
-                    "Voir tout",
+                        decoration: TextDecoration.underline,
+                      ),
+                      "Voir tout",
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const MedocList(),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Le Journal",
+                    style: GoogleFonts.poppins(
+                        fontSize: 15,
+                        color: const Color.fromARGB(255, 52, 51, 51),
+                        fontWeight: FontWeight.bold),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const DiaryList()
-          ],
+                  InkWell(
+                    splashColor: primarygreen,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DiaryScreen(
+                            articles: articles,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: primarygreen,
+                          decoration: TextDecoration.underline),
+                      "Voir tout",
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const DiaryList()
+            ],
+          ),
         ),
       ),
     );

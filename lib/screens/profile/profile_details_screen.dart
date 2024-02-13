@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/models/user.dart';
 import 'package:nuncare/screens/profile/modals/about_modal.dart';
@@ -10,6 +11,7 @@ import 'package:nuncare/screens/profile/components/experience_widget.dart';
 import 'package:nuncare/screens/profile/components/skill_widget.dart';
 import 'package:nuncare/screens/profile/components/stats_widget.dart';
 import 'package:nuncare/screens/profile/modals/experience_modal.dart';
+import 'package:nuncare/screens/profile/modals/profile_editing_modal.dart';
 import 'package:nuncare/screens/profile/modals/skill_modal.dart';
 import 'package:nuncare/services/account_service.dart';
 import 'package:nuncare/services/user_service.dart';
@@ -60,118 +62,141 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   Widget build(BuildContext context) {
     double coverHeight = 200;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  "assets/images/profile_cover.png",
-                  fit: BoxFit.cover,
-                  height: coverHeight,
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text(
+          "Profil",
+        ),
+        backgroundColor: primarygreen,
+        actions: [
+          IconButton(
+            onPressed: () => _openEditingModal(
+              context,
+              ProfileModal(
+                user: user,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  margin:
-                      EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 50.0,
-                      backgroundImage: AssetImage("assets/images/profil_3.png"),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "${user.firstName} ${user.lastName}",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    user.speciality,
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                ),
-                AboutWidget(
-                  openAboutOverlay: () => _openEditingModal(
-                    context,
-                    const AboutModal(),
-                  ),
-                  aboutText: user.about,
-                ),
-                XpWidget(
-                  openXpOverlay: () => _openEditingModal(
-                    context,
-                    const ExperienceModal(),
-                  ),
-                  experiences: user.experiences,
-                ),
-                SkillWidget(
-                  openSkillOverlay: () => _openEditingModal(
-                    context,
-                    const SkillModal(),
-                  ),
-                  skills: user.skills,
-                ),
-                ArticleWidget(
-                  openArticleOverlay: () => _openEditingModal(
-                    context,
-                    const ArticleModal(),
-                  ),
-                  articles: userArticles,
-                ),
-                const StatsWidget(),
-                const SizedBox(
-                  height: 30,
-                ),
-                TextButton.icon(
-                  label: Text(
-                    "Déconnexion",
-                    style: GoogleFonts.poppins(
-                      color: Colors.red.shade300,
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.logout,
-                    size: 20,
-                    color: Colors.red.shade300,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                )
-              ],
+            ),
+            icon: const Icon(
+              Icons.edit,
             ),
           )
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                SizedBox(
+                  width: double.infinity,
+                  child: Image.asset(
+                    "assets/images/profile_cover.png",
+                    fit: BoxFit.cover,
+                    height: coverHeight,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    margin:
+                        EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        radius: 50.0,
+                        backgroundImage:
+                            AssetImage("assets/images/profil_3.png"),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${user.firstName} ${user.lastName}",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      user.speciality,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  ),
+                  AboutWidget(
+                    openAboutOverlay: () => _openEditingModal(
+                      context,
+                      const AboutModal(),
+                    ),
+                    aboutText: user.about,
+                  ),
+                  XpWidget(
+                    openXpOverlay: () => _openEditingModal(
+                      context,
+                      const ExperienceModal(),
+                    ),
+                    experiences: user.experiences,
+                  ),
+                  SkillWidget(
+                    openSkillOverlay: () => _openEditingModal(
+                      context,
+                      const SkillModal(),
+                    ),
+                    skills: user.skills,
+                  ),
+                  ArticleWidget(
+                    openArticleOverlay: () => _openEditingModal(
+                      context,
+                      const ArticleModal(),
+                    ),
+                    articles: userArticles,
+                  ),
+                  const StatsWidget(),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  TextButton.icon(
+                    label: Text(
+                      "Déconnexion",
+                      style: GoogleFonts.poppins(
+                        color: Colors.red.shade300,
+                      ),
+                    ),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.logout,
+                      size: 20,
+                      color: Colors.red.shade300,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

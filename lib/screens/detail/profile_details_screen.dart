@@ -17,8 +17,6 @@ class DetailsRootScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.white,
-        // foregroundColor: Colors.black,
         backgroundColor: primarygreen,
         elevation: 2,
       ),

@@ -69,13 +69,6 @@ class _HomeRootScreenState extends State<HomeRootScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          screenTitle,
-        ),
-        backgroundColor: primarygreen,
-      ),
       body: screenWidget,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

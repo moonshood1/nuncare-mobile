@@ -18,6 +18,7 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
   var annuaryService = AnnuaryService();
 
   final _searchTextController = TextEditingController();
+  var _errorText;
 
   List<User> doctors = [];
   List<Instance> instances = [];
@@ -33,6 +34,17 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
 
   void _searchInstance() async {
     try {
+      if (_searchTextController.text.trim().length < 3 ||
+          _searchTextController.text.trim() == "") {
+        setState(() {
+          _errorText =
+              "Le champ de recherche doit contenir au moins 3 caracteres";
+        });
+      } else {
+        setState(() {
+          _errorText = null;
+        });
+      }
       final response = await annuaryService.searchInstance(
         _searchTextController.text.trim(),
       );
@@ -46,6 +58,13 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text(
+          "Annuaire",
+        ),
+        backgroundColor: primarygreen,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: SingleChildScrollView(
@@ -84,41 +103,33 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: CustomTextField(
+                    child: TextField(
+                      onSubmitted: (value) => _searchInstance(),
                       controller: _searchTextController,
-                      hintText: "Recherchez un hopital ou une pharmacie",
-                      icon: Icons.search,
-                      isHidden: false,
-                      isDate: false,
-                      validator: (value) {
-                        if ((value ?? '').length < 3) {
-                          return 'Le texte de recherche doit avoir au moins 3 caractères';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _searchInstance,
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: primarygreen,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      style: GoogleFonts.poppins(),
+                      decoration: InputDecoration(
+                        hintText: "Recherchez un hopital ou une pharmacie",
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
                         ),
-                      ),
-                      child: const Icon(
-                        Icons.search,
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: primarygreen,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: primarygreen),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: primarygreen),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        errorText: _errorText,
                       ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 40,
               ),
               const SizedBox(
                 height: 40,
