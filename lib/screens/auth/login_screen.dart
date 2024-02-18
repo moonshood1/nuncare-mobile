@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
 
     return LayoutBuilder(builder: (ctx, constraints) {
-      final width = constraints.maxWidth;
+      // final width = constraints.maxWidth;
 
       return SizedBox(
         height: double.infinity,

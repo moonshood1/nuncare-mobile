@@ -73,8 +73,8 @@ class PharmacyCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     color: primarygreen.shade100,
                   ),
-                  child: Row(
-                    children: const <Widget>[
+                  child: const Row(
+                    children: <Widget>[
                       Icon(
                         Icons.star,
                         color: primarygreen,

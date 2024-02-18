@@ -4,7 +4,6 @@ import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/data/articles.dart';
 import 'package:nuncare/models/user.dart';
 import 'package:nuncare/screens/profile/components/article_widget.dart';
-import 'package:nuncare/screens/profile/profile_details_screen.dart';
 
 class DetailsRootScreen extends StatelessWidget {
   const DetailsRootScreen({super.key, required this.doctor});
@@ -50,39 +49,24 @@ class DetailsRootScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 50.0,
-                            backgroundImage: AssetImage(doctor.img),
+                            backgroundImage: NetworkImage(doctor.img),
                           ),
                           const SizedBox(
                             height: 5,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Icon(
-                                Icons.star,
-                                color: primarygreen,
-                                size: 18,
-                              ),
-                              // Text(
-                              //   doctor.stars.toString(),
-                              //   style: GoogleFonts.poppins(
-                              //     color: primarygreen,
-                              //     fontSize: 14,
-                              //   ),
-                              // ),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: <Widget>[
+                          //     const Icon(
+                          //       Icons.star,
+                          //       color: primarygreen,
+                          //       size: 18,
+                          //     ),
+                          //   ],
+                          // ),
                           const SizedBox(
                             height: 5,
                           ),
-                          // Text(
-                          //   doctor.isActive ? "Disponible" : "Indisponible",
-                          //   style: GoogleFonts.poppins(
-                          //       color: doctor.isActive
-                          //           ? primarygreen
-                          //           : Colors.red.withOpacity(0.5),
-                          //       fontSize: 12),
-                          // )
                         ],
                       ),
                     ),

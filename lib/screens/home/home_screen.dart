@@ -4,11 +4,14 @@ import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/ad.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/models/medecine.dart';
+import 'package:nuncare/models/notification.dart';
 import 'package:nuncare/screens/diary/diary_screen.dart';
 import 'package:nuncare/screens/home/components/diary_list.dart';
 import 'package:nuncare/screens/home/components/medoc_list.dart';
+import 'package:nuncare/screens/notifications/root_screen.dart';
 import 'package:nuncare/screens/medecines/medecines_screen.dart';
 import 'package:nuncare/services/resource_service.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,12 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Medecine> medecines = [];
   List<Ad> ads = [];
   List<Article> articles = [];
+  List<Notif> notifications = [];
 
   @override
   void initState() {
     getMedecines();
     getAds();
     getArticles();
+    getNotifications();
     super.initState();
   }
 
@@ -68,6 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void getNotifications() async {
+    try {
+      List<Notif> response = await resourceService.getNotifications();
+
+      setState(() {
+        notifications = response;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +94,30 @@ class _HomeScreenState extends State<HomeScreen> {
           "Accueil",
         ),
         backgroundColor: primarygreen,
+        actions: [
+          badges.Badge(
+            badgeContent: const Text(
+              '0',
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
+            position: badges.BadgePosition.topStart(top: 2, start: 5),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => const NotificationsScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.notifications,
+                size: 35,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

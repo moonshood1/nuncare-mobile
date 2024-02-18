@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/models/user.dart';
+import 'package:nuncare/screens/profile/components/profile_drawer.dart';
+import 'package:nuncare/screens/profile/image_editing_screen.dart';
+import 'package:nuncare/screens/profile/modals/about_edit_modal.dart';
 import 'package:nuncare/screens/profile/modals/about_modal.dart';
 import 'package:nuncare/screens/profile/modals/article_modal.dart';
 import 'package:nuncare/screens/profile/components/about_widget.dart';
@@ -10,9 +13,11 @@ import 'package:nuncare/screens/profile/components/article_widget.dart';
 import 'package:nuncare/screens/profile/components/experience_widget.dart';
 import 'package:nuncare/screens/profile/components/skill_widget.dart';
 import 'package:nuncare/screens/profile/components/stats_widget.dart';
+import 'package:nuncare/screens/profile/modals/experience_edit_modal.dart';
 import 'package:nuncare/screens/profile/modals/experience_modal.dart';
-import 'package:nuncare/screens/profile/modals/profile_editing_modal.dart';
 import 'package:nuncare/screens/profile/modals/skill_modal.dart';
+import 'package:nuncare/screens/profile/password_editing_screen.dart';
+import 'package:nuncare/screens/profile/profile_editing_screen.dart';
 import 'package:nuncare/services/account_service.dart';
 import 'package:nuncare/services/user_service.dart';
 
@@ -45,12 +50,64 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     });
   }
 
+  void _openAddModal(BuildContext context, Widget screen) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => screen,
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
   void _openEditingModal(BuildContext context, Widget screen) async {
     final result = await showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => screen,
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
+  void _openProfileEditingPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => ProfileEditingScreen(user: user),
+      ),
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
+  void _openPasswordEditingPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const PasswordEditscreen(),
+      ),
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
+  void _openImageEditingPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const ImageEditScreen(),
+      ),
     );
 
     if (result != null && result == true) {
@@ -69,19 +126,11 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
           "Profil",
         ),
         backgroundColor: primarygreen,
-        actions: [
-          IconButton(
-            onPressed: () => _openEditingModal(
-              context,
-              ProfileModal(
-                user: user,
-              ),
-            ),
-            icon: const Icon(
-              Icons.edit,
-            ),
-          )
-        ],
+      ),
+      drawer: ProfileDrawer(
+        profileEdit: _openProfileEditingPage,
+        passwordEdit: _openPasswordEditingPage,
+        imageEdit: _openImageEditingPage,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -91,8 +140,8 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
               children: <Widget>[
                 SizedBox(
                   width: double.infinity,
-                  child: Image.asset(
-                    "assets/images/profile_cover.png",
+                  child: Image.network(
+                    "https://res.cloudinary.com/dhc0siki5/image/upload/v1674121263/medcy/2_bzsskt_k3glza.jpg",
                     fit: BoxFit.cover,
                     height: coverHeight,
                   ),
@@ -102,12 +151,11 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                   child: Container(
                     margin:
                         EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
-                    child: const Align(
+                    child: Align(
                       alignment: Alignment.center,
                       child: CircleAvatar(
                         radius: 50.0,
-                        backgroundImage:
-                            AssetImage("assets/images/profil_3.png"),
+                        backgroundImage: NetworkImage(user.img),
                       ),
                     ),
                   ),
@@ -144,51 +192,47 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                     ),
                   ),
                   AboutWidget(
-                    openAboutOverlay: () => _openEditingModal(
+                    openAboutOverlay: () => _openAddModal(
                       context,
                       const AboutModal(),
+                    ),
+                    openEditOverlay: () => _openEditingModal(
+                      context,
+                      AboutEditModal(aboutText: user.about),
                     ),
                     aboutText: user.about,
                   ),
                   XpWidget(
-                    openXpOverlay: () => _openEditingModal(
+                    openXpOverlay: () => _openAddModal(
                       context,
                       const ExperienceModal(),
+                    ),
+                    openEditOverlay: () => _openEditingModal(
+                      context,
+                      ExperienceEditModal(
+                        experience: user.experiences[1],
+                        position: user.experiences.indexOf(
+                          user.experiences[1],
+                        ),
+                      ),
                     ),
                     experiences: user.experiences,
                   ),
                   SkillWidget(
-                    openSkillOverlay: () => _openEditingModal(
+                    openSkillOverlay: () => _openAddModal(
                       context,
                       const SkillModal(),
                     ),
                     skills: user.skills,
                   ),
                   ArticleWidget(
-                    openArticleOverlay: () => _openEditingModal(
+                    openArticleOverlay: () => _openAddModal(
                       context,
                       const ArticleModal(),
                     ),
                     articles: userArticles,
                   ),
                   const StatsWidget(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  TextButton.icon(
-                    label: Text(
-                      "Déconnexion",
-                      style: GoogleFonts.poppins(
-                        color: Colors.red.shade300,
-                      ),
-                    ),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.logout,
-                      size: 20,
-                      color: Colors.red.shade300,
-                    ),
-                  ),
                   const SizedBox(
                     height: 20,
                   )

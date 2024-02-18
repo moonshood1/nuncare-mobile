@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/screens/profile/components/skill_widget.dart';
+import 'package:nuncare/screens/profile/common/row_content_widget.dart';
 
 class XpWidget extends StatelessWidget {
   const XpWidget(
-      {super.key, required this.openXpOverlay, required this.experiences});
+      {super.key,
+      required this.openXpOverlay,
+      required this.experiences,
+      required this.openEditOverlay});
 
-  final void Function() openXpOverlay;
+  final void Function() openXpOverlay, openEditOverlay;
+
   final List<dynamic> experiences;
 
   @override
   Widget build(BuildContext context) {
     Widget content = Column(
       children: [
-        ...experiences.map((e) => SkillsRowWidget(skill: e)).toList(),
+        ...experiences.map((e) => RowContentWidget(content: e)).toList(),
       ],
     );
-
-    // ListView.builder(
-    //   itemCount: experiences.length,
-    //   itemBuilder: (BuildContext ctx, int index) => Padding(
-    //     padding: const EdgeInsets.all(8.0),
-    //     child: ExperienceWidget(
-    //       experience: experiences[index],
-    //     ),
-    //   ),
-    // );
 
     if (experiences.isEmpty) {
       content = Align(
@@ -42,76 +36,42 @@ class XpWidget extends StatelessWidget {
       );
     }
 
+    void removeExperience(int position) {}
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Expériences",
-                style: GoogleFonts.poppins(
-                  color: Colors.black.withOpacity(0.7),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: primarygreen,
-                ),
-                onPressed: openXpOverlay,
-                label: Text(
-                  "Ajouter une expérience",
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    color: primarygreen,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            "Expériences",
+            style: GoogleFonts.poppins(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: 2,
+          ),
+          TextButton.icon(
+            icon: const Icon(
+              Icons.add,
+              color: primarygreen,
+            ),
+            onPressed: openXpOverlay,
+            label: Text(
+              "Ajouter une expérience",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                color: primarygreen,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           content
-        ],
-      ),
-    );
-  }
-}
-
-class ExperienceWidget extends StatelessWidget {
-  const ExperienceWidget({super.key, required this.experience});
-
-  final String experience;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: <Widget>[
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  experience,
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

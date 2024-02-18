@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -92,6 +94,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
+  void checkPersonalValues() {
+    if (_firstNameController.text == '' ||
+        _lastNameController.text == '' ||
+        _phoneController.text == '') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade500,
+          content: const Text(
+              'Vous devez remplir toutes les informations personnelles de avant de passer à l\'étape suivante'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      return;
+    }
+    setState(() => currentStep += 1);
+  }
+
+  void checkProValues() {
+    if (_orderNumberController.text == '' ||
+        _regionController.text == '' ||
+        _cityController.text == '' ||
+        _medicalCenterController.text == '' ||
+        _specialityController.text == '') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade500,
+          content: const Text(
+              'Vous devez remplir toutes les informations professionnelles avant de passer à l\'étape suivante'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      return;
+    }
+    setState(() => currentStep += 1);
+  }
+
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -124,8 +164,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   onStepContinue: () {
                     if (currentStep == 2) {
                       register();
-                    } else {
-                      setState(() => currentStep += 1);
+                    } else if (currentStep == 0) {
+                      checkPersonalValues();
+                    } else if (currentStep == 1) {
+                      checkProValues();
                     }
                   },
                   onStepCancel: currentStep == 0
@@ -169,7 +211,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           : StepState.indexed,
                       isActive: currentStep >= 0,
                       title: const Text(
-                        "Etape 1",
+                        "",
                       ),
                       // subtitle: const Text("Informations personnelles"),
                       content: Column(
@@ -214,7 +256,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           CustomTextField(
                             controller: _phoneController,
-                            hintText: "Téléphone",
+                            hintText: "Numéro de téléphone",
                             icon: Icons.phone,
                             isHidden: false,
                             isDate: false,
@@ -222,7 +264,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               const phonePattern = r'^\+\d{13}$';
                               final regExp = RegExp(phonePattern);
                               if (!regExp.hasMatch(value ?? '')) {
-                                return 'Numéro de téléphone invalide';
+                                return 'Format invalide (Ex: +2250101010101)';
                               }
                               return null;
                             },
@@ -235,10 +277,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ? StepState.complete
                           : StepState.indexed,
                       isActive: currentStep >= 1,
-                      title: const Text("Etape 2"),
-                      // subtitle: const Text(
-                      //   "Informations professionnelles",
-                      // ),
+                      title: const Text(""),
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -260,9 +299,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             icon: Icons.file_copy,
                             isHidden: false,
                             isDate: false,
+                            maxLength: 5,
                             validator: (value) {
-                              if ((value ?? '').length < 4) {
-                                return 'Le numéro doit avoir au moins 4 caractères';
+                              if (value == '') {
+                                return 'Le numéro doit avoir au moins 1 caractère';
                               }
                               return null;
                             },
@@ -275,7 +315,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             isDate: false,
                             validator: (value) {
                               if ((value ?? '').length < 3) {
-                                return 'Le numéro doit avoir au moins 3 caractères';
+                                return 'La region doit avoir au moins 3 caractères';
                               }
                               return null;
                             },
@@ -324,10 +364,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     Step(
                       isActive: currentStep >= 2,
-                      title: const Text("Etape finale"),
-                      // subtitle: const Text(
-                      //   "Informations de sécurité",
-                      // ),
+                      title: const Text(""),
                       content: Column(
                         children: <Widget>[
                           Text(

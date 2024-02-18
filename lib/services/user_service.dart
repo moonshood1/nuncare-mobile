@@ -69,6 +69,61 @@ class UserService {
     }
   }
 
+  Future<BasicResponse> editAbout(String aboutText) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/about");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'aboutText': aboutText.trim(),
+          },
+        ),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout description: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> deleteAbout() async {
+    try {
+      final url = Uri.parse("$baseUrl/users/about");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout description: $e');
+      rethrow;
+    }
+  }
+
   Future<BasicResponse> addSkill(String skill) async {
     try {
       final url = Uri.parse("$baseUrl/users/skill");
@@ -99,6 +154,67 @@ class UserService {
     }
   }
 
+  Future<BasicResponse> editSkill(String skill, int position) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/skill");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'skill': skill.trim(),
+            'position': position,
+          },
+        ),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout competence: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> deleteSkill(int position) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/skill");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'position': position,
+          },
+        ),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout competence: $e');
+      rethrow;
+    }
+  }
+
   Future<BasicResponse> addExperience(String experience) async {
     try {
       final url = Uri.parse("$baseUrl/users/experience");
@@ -118,6 +234,67 @@ class UserService {
         body: json.encode(
           {
             'experience': experience.trim(),
+          },
+        ),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout experience: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> editExperience(String experience, int position) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/experience");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'experience': experience.trim(),
+            'position': position,
+          },
+        ),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur Ajout experience: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> deleteExperience(int position) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/experience");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(
+          {
+            'position': position,
           },
         ),
       );
@@ -161,6 +338,88 @@ class UserService {
       return _processResponse(response);
     } catch (e) {
       print('Erreur Ajout article: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> editProfile(Map<String, String> userData) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(userData),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur modification profil: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> editPassword(
+      String oldPassword, String newPassword) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/password");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json
+            .encode({'oldPassword': oldPassword, 'newPassword': newPassword}),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur modification profil: $e');
+      rethrow;
+    }
+  }
+
+  Future<BasicResponse> editProfileImage(String newImg) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/profile-image");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'newImg': newImg,
+        }),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur modification profil: $e');
       rethrow;
     }
   }

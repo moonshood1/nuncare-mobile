@@ -41,6 +41,73 @@ class AnnuaryService {
     }
   }
 
+  Future<List<User>> searchDoctor(String searchText) async {
+    try {
+      final url = Uri.parse("$baseUrl/annuary/search-doctor");
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(
+          {
+            'searchText': searchText.trim(),
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        final List<dynamic> usersData = responseData['doctors'] ?? [];
+
+        final List<User> doctors =
+            usersData.map((data) => User.fromJson(data)).toList();
+
+        return doctors;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw Exception('Erreur lors de la récupération des medecins : $error');
+    }
+  }
+
+  Future<List<User>> getDoctorsWithPosition(
+    String lat,
+    String lng,
+    String type,
+  ) async {
+    try {
+      final url =
+          Uri.parse("$baseUrl/annuary/doctors-position?&lng=$lng&lat=$lat");
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        final List<dynamic> doctorsData = responseData['doctors'] ?? [];
+
+        final List<User> doctors =
+            doctorsData.map((data) => User.fromJson(data)).toList();
+
+        return doctors;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw Exception(
+          'Erreur lors de la récupération des instances avec position : $error');
+    }
+  }
+
   Future<List<Instance>> getInstances(String type) async {
     try {
       final url = Uri.parse("$baseUrl/annuary/instance?type=$type");
@@ -106,8 +173,7 @@ class AnnuaryService {
         return [];
       }
     } catch (error) {
-      throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+      throw Exception('Erreur lors de la récupération des instances : $error');
     }
   }
 
@@ -141,7 +207,7 @@ class AnnuaryService {
       }
     } catch (error) {
       throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+          'Erreur lors de la récupération des instances avec position : $error');
     }
   }
 }

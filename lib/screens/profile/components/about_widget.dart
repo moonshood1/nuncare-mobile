@@ -4,9 +4,13 @@ import 'package:nuncare/common/colors.dart';
 
 class AboutWidget extends StatelessWidget {
   const AboutWidget(
-      {super.key, required this.openAboutOverlay, required this.aboutText});
+      {super.key,
+      required this.openAboutOverlay,
+      required this.aboutText,
+      required this.openEditOverlay});
 
   final void Function() openAboutOverlay;
+  final void Function() openEditOverlay;
   final String aboutText;
 
   @override
@@ -24,7 +28,7 @@ class AboutWidget extends StatelessWidget {
       content = Align(
         alignment: Alignment.center,
         child: Text(
-          "Aucune  description ajoutée",
+          "Aucune description ajoutée",
           style: GoogleFonts.poppins(
             color: Colors.black,
             fontSize: 15,
@@ -38,37 +42,35 @@ class AboutWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "A Propos",
-                style: GoogleFonts.poppins(
-                  color: Colors.black.withOpacity(0.7),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: primarygreen,
-                ),
-                onPressed: aboutText == '' ? openAboutOverlay : () {},
-                label: Text(
-                  aboutText == ''
-                      ? "Ajouter une description"
-                      : "Modifier la description",
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    color: primarygreen,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            "A Propos",
+            style: GoogleFonts.poppins(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: 2,
+          ),
+          TextButton.icon(
+            icon: Icon(
+              aboutText == '' ? Icons.add : Icons.edit,
+              color: primarygreen,
+            ),
+            onPressed: aboutText == '' ? openAboutOverlay : openEditOverlay,
+            label: Text(
+              aboutText == ''
+                  ? "Ajouter une description"
+                  : "Modifier la description",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                color: primarygreen,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           content,
         ],

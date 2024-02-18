@@ -59,35 +59,33 @@ class ArticleWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Mes articles",
-                style: GoogleFonts.poppins(
-                  color: Colors.black.withOpacity(0.7),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: primarygreen,
-                ),
-                onPressed: openArticleOverlay,
-                label: Text(
-                  "Créer un article",
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    color: primarygreen,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            "Mes articles",
+            style: GoogleFonts.poppins(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: 2,
+          ),
+          TextButton.icon(
+            icon: const Icon(
+              Icons.add,
+              color: primarygreen,
+            ),
+            onPressed: openArticleOverlay,
+            label: Text(
+              "Créer un article",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                color: primarygreen,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           widgetContent
         ],

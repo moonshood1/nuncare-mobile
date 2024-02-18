@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/screens/profile/common/row_content_widget.dart';
 
 class SkillWidget extends StatelessWidget {
   const SkillWidget({
@@ -17,7 +18,7 @@ class SkillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = Column(
       children: [
-        ...skills.map((e) => SkillsRowWidget(skill: e)).toList(),
+        ...skills.map((e) => RowContentWidget(content: e)).toList(),
       ],
     );
 
@@ -35,74 +36,42 @@ class SkillWidget extends StatelessWidget {
       );
     }
 
+    void removeSkill(int position) {}
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Compétences",
-                style: GoogleFonts.poppins(
-                  color: Colors.black.withOpacity(0.7),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton.icon(
-                icon: const Icon(
-                  Icons.edit,
-                  color: primarygreen,
-                ),
-                onPressed: openSkillOverlay,
-                label: Text(
-                  "Ajouter une compétence",
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    color: primarygreen,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            "Compétences",
+            style: GoogleFonts.poppins(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(
-            height: 20,
+            height: 2,
+          ),
+          TextButton.icon(
+            icon: const Icon(
+              Icons.add,
+              color: primarygreen,
+            ),
+            onPressed: openSkillOverlay,
+            label: Text(
+              "Ajouter une compétence",
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                color: primarygreen,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           content,
-        ],
-      ),
-    );
-  }
-}
-
-class SkillsRowWidget extends StatelessWidget {
-  const SkillsRowWidget({super.key, required this.skill});
-  final String skill;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: [
-          Container(
-            height: 10,
-            width: 10,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(50),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            child: Text(
-              skill,
-              style: GoogleFonts.poppins(color: Colors.black),
-            ),
-          )
         ],
       ),
     );
