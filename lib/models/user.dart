@@ -1,3 +1,5 @@
+import 'package:nuncare/models/article.dart';
+
 class User {
   String id;
   String firstName;
@@ -18,6 +20,7 @@ class User {
   List<String> skills;
   List<String> experiences;
   bool isActive;
+  List<Article> articles;
 
   User(
       {required this.id,
@@ -38,7 +41,8 @@ class User {
       required this.orderNumber,
       required this.skills,
       required this.experiences,
-      required this.isActive});
+      required this.isActive,
+      required this.articles});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -61,6 +65,10 @@ class User {
       isActive: json['isActive'],
       skills: List<String>.from(json['skills'] ?? []),
       experiences: List<String>.from(json['experiences'] ?? []),
+      articles: (json['articles'] as List<dynamic>?)
+              ?.map((articleJson) => Article.fromJson(articleJson))
+              .toList() ??
+          [],
     );
   }
 
@@ -84,7 +92,8 @@ class User {
       'orderNumber': orderNumber,
       'skills': skills,
       'experiences': experiences,
-      'isActive': isActive
+      'isActive': isActive,
+      'articles': articles
     };
   }
 
@@ -108,6 +117,7 @@ class User {
       orderNumber: '',
       skills: [],
       experiences: [],
+      articles: [],
       isActive: true,
     );
   }

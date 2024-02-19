@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/screens/detail/article_details_screen.dart';
+import 'package:intl/intl.dart';
 
 class ArticleCard extends StatelessWidget {
   const ArticleCard({
@@ -13,7 +14,10 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String finalAuthor = 'Auteur : ${article.author}';
+    String finalAuthor = 'Auteur : ${article.authorName}';
+    DateTime inputDate = DateTime.parse(article.createdAt);
+
+    String formattedDate = DateFormat('dd-MM-yyyy - HH:mm').format(inputDate);
 
     return GestureDetector(
       onTap: () {
@@ -44,9 +48,10 @@ class ArticleCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.asset(
+            Image.network(
               article.img,
               width: 100,
+              fit: BoxFit.cover,
             ),
             const SizedBox(
               width: 10,
@@ -78,7 +83,7 @@ class ArticleCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        article.createdAt,
+                        'Date : $formattedDate',
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w300,
                           fontSize: 11,

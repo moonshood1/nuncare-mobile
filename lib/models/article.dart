@@ -7,9 +7,19 @@ class Article {
     required this.author,
     required this.createdAt,
     required this.content,
+    required this.authorName,
+    required this.theme,
   });
 
-  String id, img, title, author, description, createdAt, content;
+  String id,
+      img,
+      title,
+      author,
+      description,
+      createdAt,
+      content,
+      authorName,
+      theme;
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
@@ -17,9 +27,11 @@ class Article {
       img: json['img'],
       title: json['title'],
       author: json['author'],
+      authorName: json['authorName'],
       description: json['description'],
       createdAt: json['createdAt'],
       content: json['content'],
+      theme: json['theme'],
     );
   }
 }

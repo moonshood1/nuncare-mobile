@@ -6,7 +6,9 @@ import 'package:nuncare/screens/detail/profile_details_screen.dart';
 import 'package:nuncare/services/annuary_service.dart';
 
 class DoctorAnnuaryScreen extends StatefulWidget {
-  const DoctorAnnuaryScreen({super.key});
+  const DoctorAnnuaryScreen({super.key, required this.filteredDoctors});
+
+  final List<User> filteredDoctors;
 
   @override
   State<DoctorAnnuaryScreen> createState() => _DoctorAnnuaryScreenState();
@@ -19,6 +21,12 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
 
   var _errorText;
   List<User> doctors = [];
+
+  @override
+  void initState() {
+    doctors = widget.filteredDoctors;
+    super.initState();
+  }
 
   void _searchDoctor() async {
     try {
@@ -57,79 +65,7 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
   Widget build(BuildContext context) {
     Widget content = Column(
       children: [
-        for (final doctor in doctors)
-          GestureDetector(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (ctx) => DetailsRootScreen(doctor: doctor),
-              //   ),
-              // );
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              padding: const EdgeInsets.all(10),
-              height: 120,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 2,
-                    offset: const Offset(0, 2),
-                    color: Colors.black.withOpacity(0.25),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(doctor.img), fit: BoxFit.fill),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Dr ${doctor.lastName}  ${doctor.firstName}",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          doctor.speciality,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          doctor.phone,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        for (final doctor in doctors) UserCardWidget(doctor: doctor),
       ],
     );
 
@@ -223,6 +159,92 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
               content
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class UserCardWidget extends StatelessWidget {
+  const UserCardWidget({
+    super.key,
+    required this.doctor,
+  });
+
+  final User doctor;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => DetailsRootScreen(doctor: doctor),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.all(10),
+        height: 120,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 2,
+              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.25),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(doctor.img), fit: BoxFit.fill),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    "Dr ${doctor.lastName}  ${doctor.firstName}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    doctor.speciality,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    doctor.phone,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

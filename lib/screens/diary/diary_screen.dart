@@ -1,12 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/models/article.dart';
 import 'package:nuncare/screens/home/components/article_card.dart';
+import 'package:nuncare/services/resource_service.dart';
 
-class DiaryScreen extends StatelessWidget {
-  const DiaryScreen({super.key, required this.articles});
+class DiaryScreen extends StatefulWidget {
+  const DiaryScreen({super.key});
 
-  final List<dynamic> articles;
+  @override
+  State<DiaryScreen> createState() => _DiaryScreenState();
+}
+
+class _DiaryScreenState extends State<DiaryScreen> {
+  var resourceService = ResourceService();
+  List<Article> articles = [];
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    getArticles();
+    super.initState();
+  }
+
+  void getArticles() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      List<Article> response = await resourceService.getArticles();
+
+      setState(() {
+        _isLoading = false;
+        articles = response;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +55,15 @@ class DiaryScreen extends StatelessWidget {
         ),
       ),
     );
+
+    if (_isLoading && articles.isEmpty) {
+      content = const Align(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(
+          color: primarygreen,
+        ),
+      );
+    }
 
     if (articles.isNotEmpty) {
       content = ListView.builder(

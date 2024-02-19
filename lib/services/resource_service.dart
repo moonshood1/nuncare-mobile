@@ -60,12 +60,11 @@ class ResourceService {
         return [];
       }
     } catch (error) {
-      throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+      throw Exception('Erreur lors de la récupération des pubs : $error');
     }
   }
 
-  Future<List<Article>> getArticles({String size = '5'}) async {
+  Future<List<Article>> getArticles({String size = '10'}) async {
     try {
       final url = Uri.parse("$baseUrl/resources/articles?size=$size");
 
@@ -89,8 +88,7 @@ class ResourceService {
         return [];
       }
     } catch (error) {
-      throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+      throw Exception('Erreur lors de la récupération des articles : $error');
     }
   }
 
@@ -127,7 +125,7 @@ class ResourceService {
       }
     } catch (error) {
       throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+          'Erreur lors de la récupération des notifications : $error');
     }
   }
 }

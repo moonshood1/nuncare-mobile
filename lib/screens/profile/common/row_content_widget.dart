@@ -27,7 +27,11 @@ class RowContentWidget extends StatelessWidget {
           Expanded(
             child: Text(
               content,
-              style: GoogleFonts.poppins(color: Colors.black),
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w200,
+              ),
             ),
           ),
           // IconButton(

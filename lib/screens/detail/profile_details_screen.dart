@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/data/articles.dart';
 import 'package:nuncare/models/user.dart';
+import 'package:nuncare/screens/detail/components/profile_drawer.dart';
+import 'package:nuncare/screens/message/user_messaging.dart';
+import 'package:nuncare/screens/profile/common/row_content_widget.dart';
 import 'package:nuncare/screens/profile/components/article_widget.dart';
 
 class DetailsRootScreen extends StatelessWidget {
@@ -14,226 +16,222 @@ class DetailsRootScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double coverHeight = 200;
 
+    Widget experienceContent = Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        "Aucune expérience ajoutée",
+        style: GoogleFonts.poppins(
+          color: Colors.black,
+          fontSize: 13,
+          fontWeight: FontWeight.w200,
+        ),
+      ),
+    );
+
+    if (doctor.experiences.isNotEmpty) {
+      experienceContent = Column(
+        children: [
+          ...doctor.experiences.map((e) => RowContentWidget(content: e))
+        ],
+      );
+    }
+
+    Widget skillContent = Column(
+      children: [
+        ...doctor.skills.map((e) => RowContentWidget(content: e)).toList(),
+      ],
+    );
+
+    if (doctor.skills.isEmpty) {
+      skillContent = Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Aucune compétence ajoutée",
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
+      );
+    }
+
+    Widget articleContent = SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (final article in doctor.articles)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ProfileArticleCard(
+                article: article,
+              ),
+            )
+        ],
+      ),
+    );
+
+    if (doctor.articles.isEmpty) {
+      articleContent = Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Aucun article redigé",
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
+      );
+    }
+
+    void sendMessage() async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => UserMessaging(recipient: doctor),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primarygreen,
         elevation: 2,
       ),
-      body: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 30),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    child: Image.asset(
-                      "assets/images/cover_2.png",
-                      fit: BoxFit.cover,
-                      height: coverHeight,
+      drawer: DetailProfileDrawer(
+        sendMessage: () => sendMessage,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                SizedBox(
+                  width: double.infinity,
+                  child: Image.network(
+                    "https://res.cloudinary.com/dhc0siki5/image/upload/v1674121263/medcy/2_bzsskt_k3glza.jpg",
+                    fit: BoxFit.cover,
+                    height: coverHeight,
+                  ),
+                ),
+                Container(
+                  margin:
+                      EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage: NetworkImage(doctor.img),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: coverHeight - (coverHeight * 0.3),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 50.0,
-                            backgroundImage: NetworkImage(doctor.img),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: <Widget>[
-                          //     const Icon(
-                          //       Icons.star,
-                          //       color: primarygreen,
-                          //       size: 18,
-                          //     ),
-                          //   ],
-                          // ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                        ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${doctor.firstName} ${doctor.lastName}",
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      doctor.speciality,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "A Propos",
+                    style: GoogleFonts.poppins(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    doctor.about == ''
+                        ? "Aucune description ajoutée"
+                        : doctor.about,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Expériences",
+                    style: GoogleFonts.poppins(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  experienceContent,
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Compétences",
+                    style: GoogleFonts.poppins(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  skillContent,
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Articles redigés",
+                    style: GoogleFonts.poppins(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  articleContent,
+                  const SizedBox(
+                    height: 10,
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              "${doctor.firstName} ${doctor.lastName}",
-                              style: GoogleFonts.poppins(
-                                color: Colors.black.withOpacity(0.7),
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 1,
-                            ),
-                            Text(
-                              doctor.speciality,
-                              style: GoogleFonts.poppins(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              '${doctor.years.toString()} ans',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black.withOpacity(0.7),
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 1,
-                            ),
-                            Text(
-                              "D'expérience",
-                              style: GoogleFonts.poppins(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Text(
-                      "A Propos",
-                      style: GoogleFonts.poppins(
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      doctor.about,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Text(
-                      "Articles redigés",
-                      style: GoogleFonts.poppins(
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        spacing: 10,
-                        children: <Widget>[
-                          ...articles
-                              .sublist(0, 2)
-                              .map((e) => ProfileArticleCard(article: e))
-                              .toList()
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Wrap(
-                      spacing: 20,
-                      children: [
-                        ProfileContactWidget(
-                            contactFunction: () {}, icon: Icons.email),
-                        ProfileContactWidget(
-                            contactFunction: () {}, icon: Icons.phone),
-                        ProfileContactWidget(
-                            contactFunction: () {}, icon: Icons.location_on),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileContactWidget extends StatelessWidget {
-  const ProfileContactWidget({
-    required this.contactFunction,
-    required this.icon,
-    super.key,
-  });
-
-  final void Function() contactFunction;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        height: 60,
-        width: 60,
-        decoration: const BoxDecoration(
-          color: primarygreen,
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: Center(
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white,
-          ),
+            )
+          ],
         ),
       ),
     );

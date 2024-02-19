@@ -14,8 +14,8 @@ class MedocList extends StatelessWidget {
         "Aucun médicament assuré",
         style: GoogleFonts.poppins(
           color: Colors.black,
-          fontSize: 15,
-          fontWeight: FontWeight.w300,
+          fontSize: 13,
+          fontWeight: FontWeight.w200,
         ),
       ),
     );

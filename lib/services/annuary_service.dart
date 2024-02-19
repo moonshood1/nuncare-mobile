@@ -6,7 +6,7 @@ import 'package:nuncare/models/user.dart';
 import 'package:nuncare/services/account_service.dart';
 
 class AnnuaryService {
-  Future<List<User>> getDoctors({String size = '10'}) async {
+  Future<List<User>> getDoctors({String size = '5'}) async {
     try {
       final url = Uri.parse("$baseUrl/annuary/doctors?size=$size");
 
@@ -36,8 +36,7 @@ class AnnuaryService {
         return [];
       }
     } catch (error) {
-      throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+      throw Exception('Erreur lors de la récupération des docteurs : $error');
     }
   }
 
@@ -139,8 +138,7 @@ class AnnuaryService {
         return [];
       }
     } catch (error) {
-      throw Exception(
-          'Erreur lors de la récupération des médicaments : $error');
+      throw Exception('Erreur lors de la récupération des instances : $error');
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/screens/detail/article_details_screen.dart';
+import 'package:intl/intl.dart';
 
 class ArticleWidget extends StatelessWidget {
   const ArticleWidget(
@@ -43,13 +44,13 @@ class ArticleWidget extends StatelessWidget {
 
     if (articles.isEmpty) {
       widgetContent = Align(
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         child: Text(
           "Aucun article publié",
           style: GoogleFonts.poppins(
             color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.w300,
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
           ),
         ),
       );
@@ -97,11 +98,14 @@ class ArticleWidget extends StatelessWidget {
 class ProfileArticleCard extends StatelessWidget {
   const ProfileArticleCard({super.key, required this.article});
 
-  // final String title, date, reaction, image;
   final Article article;
 
   @override
   Widget build(BuildContext context) {
+    DateTime inputDate = DateTime.parse(article.createdAt);
+
+    String formattedDate = DateFormat('dd-MM-yyyy - HH:mm').format(inputDate);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -112,61 +116,67 @@ class ProfileArticleCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        width: 300,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black.withOpacity(0.1)),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 2,
-              offset: const Offset(0, 2),
-              color: Colors.black.withOpacity(0.25),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 100,
-              child: Image.network(
-                article.img,
-                fit: BoxFit.cover,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          width: 300,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Colors.black.withOpacity(0.1)),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2,
+                offset: const Offset(0, 2),
+                color: Colors.black.withOpacity(0.25),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              article.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.poppins(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Wrap(
-              spacing: 20,
-              children: [
-                Text(
-                  article.createdAt,
-                  style: GoogleFonts.poppins(
-                    fontSize: 10,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w400,
-                  ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: Image.network(
+                  article.img,
+                  fit: BoxFit.cover,
                 ),
-              ],
-            )
-          ],
-        ),
-      ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                article.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                article.theme,
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                formattedDate,
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

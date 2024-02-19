@@ -24,13 +24,13 @@ class XpWidget extends StatelessWidget {
 
     if (experiences.isEmpty) {
       content = Align(
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         child: Text(
           "Aucune expérience ajoutée",
           style: GoogleFonts.poppins(
             color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.w300,
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
           ),
         ),
       );

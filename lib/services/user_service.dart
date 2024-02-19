@@ -18,10 +18,14 @@ class BasicResponse {
 class UserResponse {
   final bool success;
   final User user;
-  final List<Article> articles;
+  // final List<Article> articles;
 
-  UserResponse(
-      {required this.success, required this.user, required this.articles});
+  UserResponse({
+    required this.success,
+    required this.user,
+
+    //  required this.articles
+  });
 }
 
 class UserService {
@@ -447,14 +451,13 @@ class UserService {
       if (response.statusCode == 200) {
         User user = User.fromJson(responseData['user']);
 
-        List<Article> articles = (responseData['articles'] as List)
-            .map((articleJson) => Article.fromJson(articleJson))
-            .toList();
+        // List<Article> articles = (responseData['articles'] as List)
+        //     .map((articleJson) => Article.fromJson(articleJson))
+        //     .toList();
 
         return UserResponse(
           success: responseData['success'],
           user: user,
-          articles: articles,
         );
       } else {
         throw Exception(

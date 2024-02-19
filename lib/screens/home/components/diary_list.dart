@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nuncare/data/articles.dart';
+import 'package:nuncare/models/article.dart';
 import 'package:nuncare/screens/home/components/article_card.dart';
 
 class DiaryList extends StatelessWidget {
-  const DiaryList({super.key});
+  const DiaryList({super.key, required this.articles});
+
+  final List<Article> articles;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,8 @@ class DiaryList extends StatelessWidget {
         "Aucun article disponible",
         style: GoogleFonts.poppins(
           color: Colors.black,
-          fontSize: 15,
-          fontWeight: FontWeight.w300,
+          fontSize: 13,
+          fontWeight: FontWeight.w200,
         ),
       ),
     );

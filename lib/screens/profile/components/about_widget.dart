@@ -20,19 +20,19 @@ class AboutWidget extends StatelessWidget {
       style: GoogleFonts.poppins(
         color: Colors.black,
         fontSize: 15,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w200,
       ),
     );
 
     if (aboutText == '') {
       content = Align(
-        alignment: Alignment.center,
+        alignment: Alignment.centerLeft,
         child: Text(
           "Aucune description ajoutée",
           style: GoogleFonts.poppins(
             color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.w300,
+            fontSize: 13,
+            fontWeight: FontWeight.w200,
           ),
         ),
       );

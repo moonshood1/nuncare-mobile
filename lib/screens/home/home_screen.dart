@@ -96,9 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: primarygreen,
         actions: [
           badges.Badge(
-            badgeContent: const Text(
-              '0',
-              style: TextStyle(color: Colors.white, fontSize: 10),
+            badgeContent: Text(
+              notifications.length.toString(),
+              style: const TextStyle(color: Colors.white, fontSize: 10),
             ),
             position: badges.BadgePosition.topStart(top: 2, start: 5),
             child: IconButton(
@@ -106,7 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const NotificationsScreen(),
+                    builder: (ctx) => NotificationsScreen(
+                      notifications: notifications,
+                    ),
                   ),
                 );
               },
@@ -183,15 +185,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            MedecinesScreen(medecines: medecines),
+                        builder: (context) => const MedecinesScreen(),
                       ),
                     ),
                     child: Text(
                       style: GoogleFonts.poppins(
                         fontSize: 13,
                         color: primarygreen,
-                        decoration: TextDecoration.underline,
                       ),
                       "Voir tout",
                     ),
@@ -216,22 +216,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   InkWell(
-                    splashColor: primarygreen,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DiaryScreen(
-                            articles: articles,
-                          ),
+                          builder: (context) => const DiaryScreen(),
                         ),
                       );
                     },
                     child: Text(
                       style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: primarygreen,
-                          decoration: TextDecoration.underline),
+                        fontSize: 13,
+                        color: primarygreen,
+                      ),
                       "Voir tout",
                     ),
                   )
@@ -240,7 +237,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const DiaryList()
+              DiaryList(
+                articles: articles,
+              )
             ],
           ),
         ),

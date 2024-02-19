@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
-import 'package:nuncare/models/article.dart';
-import 'package:nuncare/models/medecine.dart';
+import 'package:nuncare/models/user.dart';
 import 'package:nuncare/screens/annuary/doctor_annuary_screen.dart';
 import 'package:nuncare/screens/annuary/instance_annuary_screen.dart';
 import 'package:nuncare/screens/diary/diary_screen.dart';
@@ -21,34 +20,20 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
   var annuaryService = AnnuaryService();
   var resourceService = ResourceService();
 
-  List<Medecine> medecines = [];
-  List<Article> articles = [];
+  List<User> doctors = [];
 
   @override
   void initState() {
-    getMedecines();
-    getArticles();
+    getDoctors();
     super.initState();
   }
 
-  void getMedecines() async {
+  void getDoctors() async {
     try {
-      List<Medecine> response = await resourceService.getMedecines();
+      List<User> response = await annuaryService.getDoctors();
 
       setState(() {
-        medecines = response;
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  void getArticles() async {
-    try {
-      List<Article> response = await resourceService.getArticles();
-
-      setState(() {
-        articles = response;
+        doctors = response;
       });
     } catch (e) {
       print(e);
@@ -84,17 +69,19 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
               const SizedBox(
                 height: 30,
               ),
-              const Row(
+              Row(
                 children: <Widget>[
                   AnnuaryCard(
-                    screenTo: DoctorAnnuaryScreen(),
+                    screenTo: DoctorAnnuaryScreen(
+                      filteredDoctors: doctors,
+                    ),
                     label: 'Les Docteurs',
                     icon: Icons.people,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
-                  AnnuaryCard(
+                  const AnnuaryCard(
                     screenTo: InstanceAnnuaryScreen(),
                     label: 'Les hopitaux et pharmacies',
                     icon: Icons.local_hospital,
@@ -107,9 +94,7 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
               const Row(
                 children: <Widget>[
                   AnnuaryCard(
-                    screenTo: MedecinesScreen(
-                      medecines: [],
-                    ),
+                    screenTo: MedecinesScreen(),
                     label: 'Les Medicaments assurés',
                     icon: Icons.medical_services_outlined,
                   ),
@@ -117,9 +102,7 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
                     width: 20,
                   ),
                   AnnuaryCard(
-                    screenTo: DiaryScreen(
-                      articles: [],
-                    ),
+                    screenTo: DiaryScreen(),
                     label: 'Les articles publiés',
                     icon: Icons.folder,
                   ),

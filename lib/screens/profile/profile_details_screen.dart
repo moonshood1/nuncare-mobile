@@ -46,7 +46,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
 
     setState(() {
       user = response.user;
-      userArticles = response.articles;
+      userArticles = response.user.articles;
     });
   }
 
@@ -146,17 +146,14 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                     height: coverHeight,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin:
-                        EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage: NetworkImage(user.img),
-                      ),
+                Container(
+                  margin:
+                      EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage: NetworkImage(user.img),
                     ),
                   ),
                 ),
