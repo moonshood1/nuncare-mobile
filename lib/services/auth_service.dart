@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nuncare/constants/api.dart';
+import 'package:nuncare/services/account_service.dart';
 
 class LoginResponse {
   final bool success;
@@ -72,6 +73,42 @@ class AuthService {
       return BasicResponse(
         success: responseData['success'],
         message: responseData['message'],
+      );
+    } else {
+      String errorMessage = responseData['message'];
+      throw errorMessage;
+    }
+  }
+
+  Future<LoginResponse> loginWithPassword(String password) async {
+    final url = Uri.parse("$baseUrl/auth/login-with-password");
+
+    final token = await AccountService.getToken();
+
+    if (token == null) {
+      throw Exception('Token non disponible');
+    }
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(
+        {
+          'password': password.trim(),
+        },
+      ),
+    );
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return LoginResponse(
+        success: responseData['success'],
+        message: responseData['message'],
+        token: responseData['token'],
       );
     } else {
       String errorMessage = responseData['message'];

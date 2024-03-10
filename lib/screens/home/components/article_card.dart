@@ -66,7 +66,7 @@ class ArticleCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: 14,
                       color: const Color.fromARGB(144, 0, 0, 0),
                     ),
                   ),
@@ -74,7 +74,7 @@ class ArticleCard extends StatelessWidget {
                     finalAuthor,
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.normal,
-                        fontSize: 13,
+                        fontSize: 12,
                         color: Colors.grey),
                   ),
                   const SizedBox(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nuncare/screens/auth/login_screen.dart';
+import 'package:nuncare/screens/auth/login_with_pass_screen.dart';
 import 'package:nuncare/screens/auth/registration_screen.dart';
 import 'package:nuncare/screens/auth/slider_presentation.dart';
 import 'package:nuncare/screens/auth/welcome_screen.dart';
+import 'package:nuncare/services/account_service.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -14,6 +16,24 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   var activeScreen = "slider-screen";
 
+  void checkToken() async {
+    var token = await AccountService.getToken();
+
+    if (token != '' || token != null) {
+      setState(() {
+        activeScreen = "login-withpass-screen";
+      });
+
+      return;
+    }
+  }
+
+  @override
+  void initState() {
+    checkToken();
+    super.initState();
+  }
+
   void goToSliderScreen() {
     setState(() {
       activeScreen = "slider-screen";
@@ -23,6 +43,12 @@ class _RootScreenState extends State<RootScreen> {
   void goToLoginScreen() {
     setState(() {
       activeScreen = "login-screen";
+    });
+  }
+
+  void goToLoginWithPassScreen() {
+    setState(() {
+      activeScreen = "login-withpass-screen";
     });
   }
 
@@ -48,6 +74,11 @@ class _RootScreenState extends State<RootScreen> {
       case "register-screen":
         screenWidget = RegistrationScreen(
           goToLogin: goToLoginScreen,
+          goToRegistration: gotToRegisterScreen,
+        );
+        break;
+      case "login-withpass-screen":
+        screenWidget = LoginWithPassScreen(
           goToRegistration: gotToRegisterScreen,
         );
         break;

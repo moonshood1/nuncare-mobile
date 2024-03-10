@@ -16,8 +16,8 @@ class Ad {
     return Ad(
         id: json['_id'],
         img: json['img'],
-        label: json['name'],
-        company: json['category'],
+        label: json['label'],
+        company: json['company'],
         description: json['description'],
         webisteLink: json['webisteLink'],
         isActive: json['isActive']);

@@ -44,9 +44,16 @@ class AnnuaryService {
     try {
       final url = Uri.parse("$baseUrl/annuary/search-doctor");
 
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
       final response = await http.post(
         url,
         headers: {
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
         body: json.encode(
@@ -182,11 +189,19 @@ class AnnuaryService {
   ) async {
     try {
       final url = Uri.parse(
-          "$baseUrl/annuary/instances-position?type=$type&lng=$lng&lat=$lat");
+        "$baseUrl/annuary/instances-position?type=$type&lng=$lng&lat=$lat",
+      );
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
 
       final response = await http.get(
         url,
         headers: {
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );

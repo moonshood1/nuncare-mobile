@@ -6,12 +6,14 @@ import 'package:nuncare/models/article.dart';
 import 'package:nuncare/models/medecine.dart';
 import 'package:nuncare/models/notification.dart';
 import 'package:nuncare/screens/diary/diary_screen.dart';
+import 'package:nuncare/screens/home/components/ad_card.dart';
 import 'package:nuncare/screens/home/components/diary_list.dart';
 import 'package:nuncare/screens/home/components/medoc_list.dart';
 import 'package:nuncare/screens/notifications/root_screen.dart';
 import 'package:nuncare/screens/medecines/medecines_screen.dart';
 import 'package:nuncare/services/resource_service.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -90,9 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: const Text(
-          "Accueil",
+        title: Image.asset(
+          "assets/images/logo_nuncare.png",
+          width: 30,
         ),
+
+        // const Text(
+        //   "Accueil",
+        // ),
         backgroundColor: primarygreen,
         actions: [
           badges.Badge(
@@ -130,43 +137,22 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'assets/images/add_1.png',
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 130.0,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 5),
                 ),
-                Container(
-                  height: 120,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(5)),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      Center(
-                        child: Text(
-                          style: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                          "Espace publicitaire",
-                        ),
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-              ]),
+                items: ads.map(
+                  (i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return AdCard(ad: i);
+                      },
+                    );
+                  },
+                ).toList(),
+              ),
               const SizedBox(
                 height: 40,
               ),

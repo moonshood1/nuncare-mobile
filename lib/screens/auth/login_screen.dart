@@ -85,6 +85,33 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
 
+    Widget validationButton = Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      child: ElevatedButton(
+        onPressed: login,
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: primarygreen,
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+        ),
+        child: Text(
+          "Connexion",
+          style: GoogleFonts.poppins(fontSize: 15),
+        ),
+      ),
+    );
+
+    if (_isLoading) {
+      validationButton = const CircularProgressIndicator(
+        color: primarygreen,
+        strokeWidth: 2,
+      );
+    }
+
     return LayoutBuilder(builder: (ctx, constraints) {
       // final width = constraints.maxWidth;
 
@@ -165,25 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : login,
-                      style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: primarygreen,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50))),
-                      child: Text(
-                        "Connexion",
-                        style: GoogleFonts.poppins(fontSize: 15),
-                      ),
-                    ),
-                  ),
+                  validationButton,
                   const SizedBox(
                     height: 20,
                   ),

@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/article.dart';
 import 'package:nuncare/models/user.dart';
+import 'package:nuncare/screens/profile/components/images_edition_choice_widget.dart';
 import 'package:nuncare/screens/profile/components/profile_drawer.dart';
+import 'package:nuncare/screens/profile/cover_editing_screen.dart';
 import 'package:nuncare/screens/profile/image_editing_screen.dart';
 import 'package:nuncare/screens/profile/modals/about_edit_modal.dart';
 import 'package:nuncare/screens/profile/modals/about_modal.dart';
@@ -115,6 +117,34 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
     }
   }
 
+  void _openCoverEditingPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => const CoverEditScreen(),
+      ),
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
+  void _showImagesEditionModal(BuildContext context) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      context: context,
+      builder: (ctx) => ImagesEditionWidget(
+        openImg: _openImageEditingPage,
+        openCover: _openCoverEditingPage,
+      ),
+    );
+
+    if (result != null && result == true) {
+      _loadData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double coverHeight = 200;
@@ -131,6 +161,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         profileEdit: _openProfileEditingPage,
         passwordEdit: _openPasswordEditingPage,
         imageEdit: _openImageEditingPage,
+        coverEdit: _openCoverEditingPage,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -141,7 +172,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: Image.network(
-                    "https://res.cloudinary.com/dhc0siki5/image/upload/v1674121263/medcy/2_bzsskt_k3glza.jpg",
+                    user.cover,
                     fit: BoxFit.cover,
                     height: coverHeight,
                   ),
@@ -151,9 +182,12 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                       EdgeInsets.only(top: coverHeight - (coverHeight * 0.3)),
                   child: Align(
                     alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 50.0,
-                      backgroundImage: NetworkImage(user.img),
+                    child: GestureDetector(
+                      onTap: () => _showImagesEditionModal(context),
+                      child: CircleAvatar(
+                        radius: 50.0,
+                        backgroundImage: NetworkImage(user.img),
+                      ),
                     ),
                   ),
                 ),

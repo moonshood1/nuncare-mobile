@@ -11,6 +11,7 @@ class User {
   String speciality;
   int years;
   String img;
+  String cover;
   String phone;
   String region;
   String city;
@@ -33,6 +34,7 @@ class User {
       required this.speciality,
       required this.years,
       required this.img,
+      required this.cover,
       required this.phone,
       required this.region,
       required this.city,
@@ -56,6 +58,7 @@ class User {
       speciality: json['speciality'],
       years: json['years'] ?? 0,
       img: json['img'] ?? '',
+      cover: json['cover'] ?? '',
       phone: json['phone'],
       region: json['region'],
       city: json['city'],
@@ -84,6 +87,7 @@ class User {
       'speciality': speciality,
       'years': years,
       'img': img,
+      'cover': cover,
       'phone': phone,
       'region': region,
       'city': city,
@@ -109,6 +113,7 @@ class User {
       speciality: '',
       years: 0,
       img: '',
+      cover: '',
       phone: '',
       region: '',
       city: '',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/user.dart';
+import 'package:nuncare/screens/annuary/doctor_location_screen.dart';
 import 'package:nuncare/screens/detail/profile_details_screen.dart';
 import 'package:nuncare/services/annuary_service.dart';
 
@@ -26,6 +27,19 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
   void initState() {
     doctors = widget.filteredDoctors;
     super.initState();
+  }
+
+  void _openSearchModal(BuildContext context) async {
+    final result = await showModalBottomSheet(
+      useSafeArea: true,
+      // isScrollControlled: true,
+      context: context,
+      builder: (ctx) => const DoctorLocationScreen(),
+    );
+
+    // if (result != null && result == true) {
+    //   _loadData();
+    // }
   }
 
   void _searchDoctor() async {
@@ -105,7 +119,7 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => _openSearchModal(context),
                     child: const Center(
                       child: Icon(
                         Icons.location_on,

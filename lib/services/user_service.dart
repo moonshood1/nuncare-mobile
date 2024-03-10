@@ -428,6 +428,34 @@ class UserService {
     }
   }
 
+  Future<BasicResponse> editCoverImage(String newImg) async {
+    try {
+      final url = Uri.parse("$baseUrl/users/cover-image");
+
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({
+          'newImg': newImg,
+        }),
+      );
+
+      return _processResponse(response);
+    } catch (e) {
+      print('Erreur modification profil: $e');
+      rethrow;
+    }
+  }
+
   Future<UserResponse> getUserData() async {
     try {
       final url = Uri.parse("$baseUrl/users");

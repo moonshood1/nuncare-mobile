@@ -4,10 +4,10 @@ class Medecine {
     required this.img,
     required this.name,
     required this.category,
-    required this.description,
+    required this.price,
   });
 
-  String id, img, name, category, description;
+  String id, img, name, category, price;
 
   factory Medecine.fromJson(Map<String, dynamic> json) {
     return Medecine(
@@ -15,7 +15,7 @@ class Medecine {
       img: json['img'],
       name: json['name'],
       category: json['category'],
-      description: json['description'],
+      price: json['price'],
     );
   }
 
@@ -25,7 +25,7 @@ class Medecine {
       'img': img,
       'name': name,
       'category': category,
-      'description': description,
+      'price': price,
     };
   }
 }

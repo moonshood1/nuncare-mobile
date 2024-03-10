@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/models/user.dart';
-import 'package:nuncare/screens/detail/components/profile_drawer.dart';
 import 'package:nuncare/screens/message/user_messaging.dart';
 import 'package:nuncare/screens/profile/common/row_content_widget.dart';
 import 'package:nuncare/screens/profile/components/article_widget.dart';
@@ -31,14 +30,44 @@ class DetailsRootScreen extends StatelessWidget {
     if (doctor.experiences.isNotEmpty) {
       experienceContent = Column(
         children: [
-          ...doctor.experiences.map((e) => RowContentWidget(content: e))
+          ...doctor.experiences.map(
+            (e) => ListTile(
+              leading: const Icon(
+                Icons.circle,
+                color: primarygreen,
+              ),
+              title: Text(
+                e,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ),
+          )
         ],
       );
     }
 
     Widget skillContent = Column(
       children: [
-        ...doctor.skills.map((e) => RowContentWidget(content: e)).toList(),
+        ...doctor.skills
+            .map(
+              (e) => ListTile(
+                leading: const Icon(
+                  Icons.circle,
+                  color: primarygreen,
+                ),
+                title: Text(
+                  e,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
       ],
     );
 
@@ -98,9 +127,15 @@ class DetailsRootScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: primarygreen,
         elevation: 2,
-      ),
-      drawer: DetailProfileDrawer(
-        sendMessage: () => sendMessage,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: InkWell(
+              onTap: sendMessage,
+              child: const Icon(Icons.send),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -111,7 +146,7 @@ class DetailsRootScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Image.network(
-                    "https://res.cloudinary.com/dhc0siki5/image/upload/v1674121263/medcy/2_bzsskt_k3glza.jpg",
+                    doctor.cover,
                     fit: BoxFit.cover,
                     height: coverHeight,
                   ),
@@ -133,7 +168,7 @@ class DetailsRootScreen extends StatelessWidget {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

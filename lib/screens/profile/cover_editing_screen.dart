@@ -6,35 +6,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nuncare/services/third_party_service.dart';
 import 'package:nuncare/services/user_service.dart';
 
-class ImageEditScreen extends StatefulWidget {
-  const ImageEditScreen({super.key});
+class CoverEditScreen extends StatefulWidget {
+  const CoverEditScreen({super.key});
 
   @override
-  State<ImageEditScreen> createState() => _ImageEditScreenState();
+  State<CoverEditScreen> createState() => _ImageEditScreenState();
 }
 
-class _ImageEditScreenState extends State<ImageEditScreen> {
+class _ImageEditScreenState extends State<CoverEditScreen> {
   File? _selectedImage;
-  var _isGallery = false;
   var _isLoading = false;
-
-  void _takePicture() async {
-    final imagePicker = ImagePicker();
-
-    final pickedImage = await imagePicker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 600,
-    );
-
-    if (pickedImage == null) {
-      return;
-    }
-
-    setState(() {
-      _isGallery = false;
-      _selectedImage = File(pickedImage.path);
-    });
-  }
 
   void _pickPicture() async {
     final imagePicker = ImagePicker();
@@ -49,7 +30,6 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
     }
 
     setState(() {
-      _isGallery = true;
       _selectedImage = File(pickedImage.path);
     });
   }
@@ -59,11 +39,12 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
       setState(() {
         _isLoading = true;
       });
+
       final imgUrl = await ThirdPartyService().uploadImageOnCloudinary(
         _selectedImage!,
       );
 
-      BasicResponse responseApi = await UserService().editProfileImage(imgUrl);
+      BasicResponse responseApi = await UserService().editCoverImage(imgUrl);
 
       if (!context.mounted) {
         return;
@@ -111,38 +92,24 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton.icon(
-          onPressed: _takePicture,
-          icon: const Icon(
-            Icons.camera,
-            color: primarygreen,
-          ),
-          label: Text(
-            "Prenez une photo",
-            style: GoogleFonts.poppins(
-              color: primarygreen,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        TextButton.icon(
           onPressed: _pickPicture,
           icon: const Icon(
             Icons.camera,
             color: primarygreen,
           ),
           label: Text(
-            "Choisissez une image",
+            "Choisissez une image de couverture",
             style: GoogleFonts.poppins(
               color: primarygreen,
             ),
           ),
-        )
+        ),
       ],
     );
 
     if (_selectedImage != null) {
       content = GestureDetector(
-        onTap: _isGallery ? _pickPicture : _takePicture,
+        onTap: _pickPicture,
         child: Image.file(
           _selectedImage!,
           fit: BoxFit.cover,
@@ -156,7 +123,7 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
       appBar: AppBar(
         centerTitle: false,
         title: const Text(
-          "Modification de l'image de profil",
+          "Modification de l'image de couverture",
           style: TextStyle(fontSize: 12),
         ),
         backgroundColor: primarygreen,
@@ -169,11 +136,12 @@ class _ImageEditScreenState extends State<ImageEditScreen> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(
-                      color: primarygreen,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(10)),
+                  border: Border.all(
+                    color: primarygreen,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 height: 250,
                 width: double.infinity,
                 alignment: Alignment.center,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
 
 class RowContentWidget extends StatelessWidget {
@@ -9,40 +8,21 @@ class RowContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: [
-          Container(
-            height: 10,
-            width: 10,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
-              borderRadius: BorderRadius.circular(50),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            child: Text(
-              content,
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w200,
-              ),
-            ),
-          ),
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: const Icon(
-          //     Icons.edit,
-          //     color: primarygreen,
-          //   ),
-          // )
-        ],
+    return ListTile(
+      leading: const Icon(
+        Icons.circle,
+        color: primarygreen,
       ),
+      title: Text(
+        content,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w200,
+        ),
+      ),
+      onTap: () => {
+        print('tapped'),
+      },
     );
   }
 }

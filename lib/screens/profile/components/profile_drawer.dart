@@ -7,9 +7,10 @@ class ProfileDrawer extends StatelessWidget {
     required this.profileEdit,
     required this.passwordEdit,
     required this.imageEdit,
+    required this.coverEdit,
   });
 
-  final void Function() profileEdit, passwordEdit, imageEdit;
+  final void Function() profileEdit, passwordEdit, imageEdit, coverEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,14 @@ class ProfileDrawer extends StatelessWidget {
                 leading: const Icon(Icons.image),
                 title: const Text("Modifier la photo de profil"),
                 onTap: () => {Navigator.pop(context), imageEdit()},
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text("Modifier la photo de couverture"),
+                onTap: () => {Navigator.pop(context), coverEdit()},
               ),
               const SizedBox(
                 height: 20,

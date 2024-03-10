@@ -4,11 +4,12 @@ import 'package:nuncare/common/colors.dart';
 import 'package:nuncare/screens/profile/common/row_content_widget.dart';
 
 class XpWidget extends StatelessWidget {
-  const XpWidget(
-      {super.key,
-      required this.openXpOverlay,
-      required this.experiences,
-      required this.openEditOverlay});
+  const XpWidget({
+    super.key,
+    required this.openXpOverlay,
+    required this.experiences,
+    required this.openEditOverlay,
+  });
 
   final void Function() openXpOverlay, openEditOverlay;
 
