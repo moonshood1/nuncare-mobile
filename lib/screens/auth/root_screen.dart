@@ -19,7 +19,8 @@ class _RootScreenState extends State<RootScreen> {
   void checkToken() async {
     var token = await AccountService.getToken();
 
-    if (token != '' || token != null) {
+    if (token != '' && token != null) {
+      print('token non null');
       setState(() {
         activeScreen = "login-withpass-screen";
       });

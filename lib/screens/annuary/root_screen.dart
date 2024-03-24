@@ -20,24 +20,9 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
   var annuaryService = AnnuaryService();
   var resourceService = ResourceService();
 
-  List<User> doctors = [];
-
   @override
   void initState() {
-    getDoctors();
     super.initState();
-  }
-
-  void getDoctors() async {
-    try {
-      List<User> response = await annuaryService.getDoctors();
-
-      setState(() {
-        doctors = response;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -69,19 +54,17 @@ class _AnnuaryRootScreenState extends State<AnnuaryRootScreen> {
               const SizedBox(
                 height: 30,
               ),
-              Row(
+              const Row(
                 children: <Widget>[
                   AnnuaryCard(
-                    screenTo: DoctorAnnuaryScreen(
-                      filteredDoctors: doctors,
-                    ),
+                    screenTo: DoctorAnnuaryScreen(),
                     label: 'Les Docteurs',
                     icon: Icons.people,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 20,
                   ),
-                  const AnnuaryCard(
+                  AnnuaryCard(
                     screenTo: InstanceAnnuaryScreen(),
                     label: 'Les hopitaux et pharmacies',
                     icon: Icons.local_hospital,

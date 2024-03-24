@@ -24,34 +24,50 @@ class MedocCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        children: <Widget>[
-          Image.asset(
-            medecine.img,
-            height: 70,
+      child: Column(children: <Widget>[
+        Image.network(
+          medecine.img,
+          height: 70,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          medecine.name,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            color: const Color.fromARGB(144, 0, 0, 0),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            medecine.name,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: const Color.fromARGB(144, 0, 0, 0),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              medecine.dci,
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w200,
+                fontSize: 10,
+                color: Colors.grey,
+              ),
             ),
-          ),
-          Text(
-            medecine.category,
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              color: Colors.grey,
+            Text(
+              medecine.category,
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w200,
+                fontSize: 10,
+                color: Colors.grey,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        )
+      ]),
     );
   }
 }

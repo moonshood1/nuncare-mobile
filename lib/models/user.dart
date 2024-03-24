@@ -15,6 +15,9 @@ class User {
   String phone;
   String region;
   String city;
+  String address;
+  double lng;
+  double lat;
   String email;
   String password;
   String orderNumber;
@@ -38,6 +41,9 @@ class User {
       required this.phone,
       required this.region,
       required this.city,
+      required this.address,
+      required this.lat,
+      required this.lng,
       required this.email,
       required this.password,
       required this.orderNumber,
@@ -62,6 +68,9 @@ class User {
       phone: json['phone'],
       region: json['region'],
       city: json['city'],
+      address: json['address'],
+      lat: (json['lat'] ?? 0).toDouble(),
+      lng: (json['lng'] ?? 0).toDouble(),
       email: json['email'],
       password: json['password'],
       orderNumber: json['orderNumber'],
@@ -91,6 +100,9 @@ class User {
       'phone': phone,
       'region': region,
       'city': city,
+      'address': address,
+      'lat': lat,
+      'lng': lng,
       'email': email,
       'password': password,
       'orderNumber': orderNumber,
@@ -117,6 +129,9 @@ class User {
       phone: '',
       region: '',
       city: '',
+      address: '',
+      lat: 0,
+      lng: 0,
       email: '',
       password: '',
       orderNumber: '',

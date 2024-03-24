@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nuncare/screens/auth/root_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 final theme = ThemeData(
   useMaterial3: false,
@@ -13,8 +15,11 @@ final theme = ThemeData(
   // ),
 );
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,

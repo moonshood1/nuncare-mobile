@@ -87,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void getNews() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,6 +103,24 @@ class _HomeScreenState extends State<HomeScreen> {
         // ),
         backgroundColor: primarygreen,
         actions: [
+          badges.Badge(
+            badgeContent: const Text(
+              "0",
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
+            position: badges.BadgePosition.topStart(top: 2, start: 5),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.article,
+                size: 35,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
           badges.Badge(
             badgeContent: Text(
               notifications.length.toString(),
@@ -125,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white,
               ),
             ),
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -187,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const MedocList(),
+              MedocList(medecines: medecines),
               const SizedBox(
                 height: 30,
               ),

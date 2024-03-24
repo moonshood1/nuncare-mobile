@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776566476365",
+    "project_id": "nuncare-app",
+    "storage_bucket": "nuncare-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776566476365:android:8e3211f4a1e4ef424d1604",
+        "android_client_info": {
+          "package_name": "com.example.nuncare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBflu9EM5D8h-rPSwHQ-bP3E02yPRf3rxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

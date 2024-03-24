@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nuncare/common/colors.dart';
+import 'package:nuncare/screens/message/components/chat_messages.dart';
+import 'package:nuncare/screens/message/new_message_screen.dart';
 
 class MessageRootScreen extends StatefulWidget {
   const MessageRootScreen({super.key});
@@ -20,19 +22,15 @@ class _MessageRootScreenState extends State<MessageRootScreen> {
         ),
         backgroundColor: primarygreen,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: const <Widget>[
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                "TO DO : Implementation du backend / service de messagerie",
-              )
-            ],
-          ),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ChatMessages(),
+            ),
+            // NewMessageScreen()
+          ],
         ),
       ),
     );

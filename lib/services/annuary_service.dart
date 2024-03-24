@@ -83,15 +83,21 @@ class AnnuaryService {
   Future<List<User>> getDoctorsWithPosition(
     String lat,
     String lng,
-    String type,
   ) async {
     try {
       final url =
           Uri.parse("$baseUrl/annuary/doctors-position?&lng=$lng&lat=$lat");
 
+      final token = await AccountService.getToken();
+
+      if (token == null) {
+        throw Exception('Token non disponible');
+      }
+
       final response = await http.get(
         url,
         headers: {
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );

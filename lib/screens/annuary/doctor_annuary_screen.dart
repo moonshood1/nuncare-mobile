@@ -7,9 +7,7 @@ import 'package:nuncare/screens/detail/profile_details_screen.dart';
 import 'package:nuncare/services/annuary_service.dart';
 
 class DoctorAnnuaryScreen extends StatefulWidget {
-  const DoctorAnnuaryScreen({super.key, required this.filteredDoctors});
-
-  final List<User> filteredDoctors;
+  const DoctorAnnuaryScreen({super.key});
 
   @override
   State<DoctorAnnuaryScreen> createState() => _DoctorAnnuaryScreenState();
@@ -25,8 +23,24 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
 
   @override
   void initState() {
-    doctors = widget.filteredDoctors;
+    getDoctors();
     super.initState();
+  }
+
+  void getDoctors() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      List<User> response = await annuaryService.getDoctors();
+
+      setState(() {
+        doctors = response;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _openSearchModal(BuildContext context) async {
@@ -37,9 +51,9 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
       builder: (ctx) => const DoctorLocationScreen(),
     );
 
-    // if (result != null && result == true) {
-    //   _loadData();
-    // }
+    if (result != null) {
+      _searchDoctorsLocated(result['lat'].toString(), result['lng'].toString());
+    }
   }
 
   void _searchDoctor() async {
@@ -62,6 +76,26 @@ class _DoctorAnnuaryScreenState extends State<DoctorAnnuaryScreen> {
       final response = await annuaryService.searchDoctor(
         _searchTextController.text.trim(),
       );
+
+      setState(() {
+        _isLoading = false;
+        doctors = response;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _searchDoctorsLocated(String lat, String lng) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final response = await annuaryService.getDoctorsWithPosition(lat, lng);
 
       setState(() {
         _isLoading = false;

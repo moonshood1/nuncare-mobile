@@ -115,6 +115,7 @@ class DetailsRootScreen extends StatelessWidget {
     }
 
     void sendMessage() async {
+      return;
       await Navigator.push(
         context,
         MaterialPageRoute(

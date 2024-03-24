@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nuncare/data/medecines.dart';
+import 'package:nuncare/models/medecine.dart';
 import 'package:nuncare/screens/home/components/medoc_card.dart';
 
 class MedocList extends StatelessWidget {
-  const MedocList({super.key});
+  const MedocList({super.key, required this.medecines});
+
+  final List<Medecine> medecines;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,6 @@ class MedocList extends StatelessWidget {
             ...medecines
                 .sublist(0, 3)
                 .map((medecine) => MedocCard(medecine: medecine))
-                .toList()
           ],
         ),
       );
